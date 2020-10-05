@@ -1,0 +1,11 @@
+*.COM
+*.EXE
+*.car
+*.cfg
+*.lst
+*.o
+.backups
+.swp
+*.s
+# vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab : 
+# vim: set textwidth=0 filetype=conf foldmethod=marker nospell : 

@@ -1,0 +1,7 @@
+.gitattributes			text eol=lf
+.gitignore			text eol=lf
+*.M65				text eol=lf
+Makefile			text eol=lf
+
+# vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab : 
+# vim: set textwidth=0 filetype=conf foldmethod=marker nospell : 
