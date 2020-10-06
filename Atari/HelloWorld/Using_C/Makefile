@@ -29,7 +29,7 @@ clean:
 	rm -v *.COM *.o *.s
 
 run: $(Exe_File)
-	atari800					\
+	/usr/local/bin/atari800					\
 	    -autosave-config				\
 	    -cart-type 1				\
 	    -hreadwrite					\
