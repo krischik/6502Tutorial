@@ -31,12 +31,22 @@ git config "user.email"         "krischik@users.sourceforge.net"
 git branch --set-upstream-to="remotes/origin/master"            "master"
 git branch --set-upstream-to="remotes/origin/develop"           "develop"
 
+git remote add "github" "https://github.com/krischik/6502Tutorial.git"
+git remote add "gitlab" "https://gitlab.com/krischik/6502Tutorial.git"
+git remote set-url origin "https://gitlab.com/krischik/6502Tutorial.git"
+git fetch --all
+
 pushd "Documents"
     git config "credential.helper"  "store"
     git config "push.default"       "current"
     git config "pull.rebase"        "false"
     git config "user.name"          "Martin Krischik"
     git config "user.email"         "krischik@users.sourceforge.net"
+
+    git remote add "github" "https://github.com/krischik/6502Tutorial.wiki.git"
+    git remote add "gitlab" "https://gitlab.com/krischik/6502Tutorial.wiki.git"
+    git remote set-url origin "https://gitlab.com/krischik/6502Tutorial.wiki.git"
+    git fetch --all
 
     # Important: Don't add lfs or flow support for the Wiki!
 popd
