@@ -45,7 +45,7 @@ run: $(Exe_File)
 	    "$(User_Files)/Disks/CC65-Development.xfd"
 
 $(Exe_File): ${Object_Files}
-	ld65 --target atari -o $(@) $(+) --lib atari.lib
+	ld65 --target atari --mapfile HELLO.MAP -o $(@) $(+) --lib atari.lib
 
 HelloWorld.o: HelloWorld.s
 
