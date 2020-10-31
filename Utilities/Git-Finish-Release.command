@@ -23,26 +23,39 @@ fi
 setopt Err_Exit
 setopt No_XTrace
 
-if test ${#} -eq 1; then
-    local   in_Task="${1}"
-    local Task_Type="${in_Task%%[0-9]*}"
-    local   Task_No="${in_Task#${Task_Type}}"
+if test ${#} -eq 2; then
+    local in_Release="${1}"
+    local in_Comment="${2}"
 
     pushd "${PROJECT_HOME}"
 	git status
 	git submodule foreach git status
 
-	echo "Task Type   : ${Task_Type}"
-	echo "Task Number : ${Task_No}"
-	read -sk1 "? add, commit and push (Y/N): "
+	echo "Release     : ${in_Release}"
+	echo "Comment     : ${in_Comment}"
+	read -sk1 "? add, commit, publish and finish (Y/N): "
 	echo
 
 	if test "${REPLY:u}" = "Y"; then
-	    for I in "Documents" ".";  do
+	    for I in "." "Documents";  do
 		pushd "${I}"
-		    echo "### Finishe ${Task_Type} «${Task_No}» for «${I}»"
+		    echo "### Publish ${in_Release} for «${I}»"
 
-		    git flow feature finish "${in_Task}"
+		    git add "."
+		    if ! git commit -m"${in_Release} : ${in_Comment}"; then
+			echo "nothing to commit but we publish anyway"
+		    fi
+
+		    if ! git flow release publish "${in_Release}"; then
+			echo "publish failed, try a simple push instead"
+			git push
+		    fi
+
+		    git flow release finish "${in_Release}"
+
+		    git checkout master
+		    git push --tags
+		    git checkout develop
 		    git push
 		popd
 	    done; unset I
@@ -50,9 +63,10 @@ if test ${#} -eq 1; then
     popd
 else
    echo '
-Git-Finish-Feature Task
+Git-Publish-Release Task Comment
 
-    Task    Task to finish
+    Task    Task to publish
+    Comment Comment for publish
 '
 fi
 
