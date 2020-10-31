@@ -53,8 +53,9 @@ if test ${#} -eq 2; then
 
 		    git flow release finish "${in_Release}"
 
-		    git checkout master
 		    git push --tags
+		    git checkout master
+		    git push
 		    git checkout develop
 		    git push
 		popd
