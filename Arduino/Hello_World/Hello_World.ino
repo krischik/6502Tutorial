@@ -17,7 +17,7 @@
 
 /**
    Just testing if the Arduino, or better the
-   keyestudio MEGA works and is propperly
+   keyestudio MEGA works and is properly
    connected to the computer
 */
 void setup()
