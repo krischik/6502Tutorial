@@ -15,91 +15,157 @@
    along with this program.  If not, see «http://www.gnu.org/licenses/».
 ************************************************************* }}}1 *********/
 
-// Address bus pins
-//
-static const byte A[] = {
-  22, 24, 26, 28, 30, 32, 34, 36,
-  38, 40, 42, 44, 46, 48, 50, 52
-};
+#include <USBAPI.h>
 
-// Data bus pins
-//
-static const byte D[] = {
-  39, 41, 43, 45, 47, 49, 51, 53
-};
-
-// Clock pin
-//
-static const byte PHI2 = 2;
-static void onClock ();
-
-// Read/Write pin
-//
-static const byte RWB = 3;
-
-void setup ()
+/**
+ * Bus class handles reading the 6050 address and data bus
+ */
+class Bus
 {
-  Serial.begin (115200);
+private:
+    /**
+     * Size of bus (16 for address bus and 8 for data bus)
+     */
+    size_t Size;
+    /**
+     * Arduino I/O lines the bus is connected to
+     */
+    byte const* Lines;
 
-  // Setup address bus pins
-  //
-  for (unsigned int i = 0; i < sizeof A; i++)
-  {
-    pinMode (A[i], INPUT);
-  } // for
+public:
+    /**
+     * initialise Bus.
+     *
+     * @param Size Size of bus (16 for address bus and 8 for data bus)
+     * @param Lines Arduino I/O lines the bus is connected to
+     */
+    Bus (const byte Lines[], size_t Size)
+    {
+        this->Size = Size;
+        this->Lines = Lines;
+    } // Bus
 
-  // Setup data bus pins 
-  //
-  for (unsigned int i = 0; i < sizeof D; i++)
-  {
-    pinMode (D[i], INPUT);
-  } // for
+    /**
+     * initialize the Arduino I/O lines used to monitor the bus to INPUT.
+     */
+    void Init () const
+    {
+        for (unsigned int i = 0;
+             i < Size;
+             i++)
+        {
+            pinMode (Lines[i], INPUT);
+        } // for
 
-  // Setup plock pin
-  //
-  pinMode (PHI2, INPUT);
-  attachInterrupt (digitalPinToInterrupt (PHI2), onClock, RISING);
+        return;
+    } // Init
 
-  // Setup read/write puin
-  pinMode (RWB, INPUT);
-  
+    /**
+     * read the but date from the Arduino I/O lines.
+     *
+     * @return value read.
+     */
+    word Read () const
+    {
+        word Retval = 0;
+
+        for (unsigned int i = 0;
+             i < Size;
+             i++)
+        {
+            auto bit = digitalRead (Lines[i]) == HIGH ? 1 : 0;
+
+            Serial.print (bit);
+
+            Retval = (Retval << 1) + bit;
+        } // for
+
+        Serial.print (" ");
+
+        return Retval;
+    } // Read
+};
+
+/**
+ * Address bus
+ */
+static Bus const A = Bus (
+    (byte[16]) {22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52},
+    16);
+
+/**
+ * Data bus
+ */
+static Bus const D = Bus (
+    (byte[8]) {39, 41, 43, 45, 47, 49, 51, 53},
+    8);
+
+/**
+ * Clock pin
+ */
+static byte const PHI2 = 2;
+
+/**
+ * executed at every clock pulse of the monitored 6502
+ */
+static void On_Clock ();
+
+/**
+ * Read/Write pin
+ */
+static byte const RWB = 3;
+
+/**
+ * Setup Arduino
+ */
+extern void setup ()
+{
+    Serial.begin (115200);
+    Serial.println();
+    Serial.println("Start 6502 Monitor");
+
+    // Setup address bus pins
+    //
+    A.Init ();
+
+    // Setup data bus pins
+    //
+    D.Init ();
+
+    // Setup clock pin
+    //
+    pinMode (PHI2, INPUT);
+    attachInterrupt (digitalPinToInterrupt(PHI2), On_Clock, RISING);
+
+    // Setup read/write pin
+    //
+    pinMode (RWB, INPUT);
+
+    return;
 } // setup
 
-void loop()
+extern void loop ()
 {
-  // do nothing
+    // do nothing
+
+    return;
 } // loop
 
-void onClock ()
+/**
+ * executed at every clock pulse of the monitored 6502
+ */
+static void On_Clock ()
 {
-  word Address = 0;
-  for (unsigned int i = 0; i < sizeof A; i++)
-  {
-    auto bit = digitalRead (A[i]) == HIGH ? 1 : 0;
+    auto Address = A.Read ();
+    auto Data = D.Read ();
+    auto Read_Write = digitalRead (RWB) == HIGH ? 'r' : 'W';
+    char Output[15];
 
-    Serial.print (bit);
+    snprintf (Output, sizeof Output, "%04x %c %02x", Address, Read_Write, Data);
+    Serial.println (Output);
 
-    Address = (Address << 1) + bit;
-  } // for
-
-  Serial.print ("  ");
-
-  byte Data = 0;
-  for (unsigned int i = 0; i < sizeof D; i++)
-  {
-    auto bit = digitalRead (D[i]) == HIGH ? 1 : 0;
-
-    Serial.print (bit);
-
-    Data = (Data << 1) + bit;
-  } // for
-
-  auto Read_Write = digitalRead (RWB) == HIGH ? 'r' : 'W';
-
-  char output [15];
-  snprintf (output, sizeof output, "  %04x %c %02x", Address, Read_Write, Data);
-  Serial.println (output);
-} // onClock
+    return;
+} // On_Clock
 
 /*********************************************************** {{{1 **********/
 /* vim: set nowrap tabstop=8 shiftwidth=2 softtabstop=2 expandtab : */
