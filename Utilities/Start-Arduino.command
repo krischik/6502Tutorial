@@ -27,24 +27,16 @@ source ${0:h}/Setup.command
 setopt Err_Exit;
 setopt XTrace;
 
-if test ! -d "${Workspace}/${1}"; then
-    mkdir -p "${Workspace}/${1}"
+if test ! -d "${Workspace}/Arduino"; then
+    mkdir -p "${Workspace}/Arduino"
 fi
 
-# pushd "${Workspace}/${1}"
-    # "${CLION_HOME}/Contents/MacOS/clion"		\
-	# "${Workspace}/${1}"				\
-	# 1>~/Library/Logs/${PROJECT_NAME}-${0:t:r}.out   \
-	# 2>~/Library/Logs/${PROJECT_NAME}-${0:t:r}.err   &
-# popd
-
-pushd "${PROJECT_HOME}/${1}"
-    "${CLION_HOME}/Contents/MacOS/clion"		\
-	"${PROJECT_HOME}/${1}"				\
-	1>~/Library/Logs/${PROJECT_NAME}-${0:t:r}.out   \
-	2>~/Library/Logs/${PROJECT_NAME}-${0:t:r}.err   &
+pushd "${Workspace}"
+    "${ARDUINO_HOME}/Contents/MacOS/Arduino"			    \
+	--preferences-file "${Workspace}/Arduino/preferences.txt"   \
+	1>~/Library/Logs/${PROJECT_NAME}-${0:t:r}.out		    \
+	2>~/Library/Logs/${PROJECT_NAME}-${0:t:r}.err		    &
 popd
-
 
 ############################################################ {{{1 ###########
 # vim: set wrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

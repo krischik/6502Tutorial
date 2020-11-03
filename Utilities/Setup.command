@@ -34,12 +34,16 @@ typeset -x -g		     opt="/opt/local"
 typeset -x -g		RUBYHOME="/usr/local/opt/ruby"
 
 typeset -x -g		    WORK=$(realFile "/Work")
+typeset -x -g		MacPorts="/Applications/MacPorts"
 typeset -x -g	       Developer="/Applications/Developer"
 typeset -x -g	    PROJECT_NAME="${PROJECT_NAME-6502Tutorial}"
 
 typeset -x -g	       Workspace=$(realFile "${Workspace-${WORK}/Workspaces/${PROJECT_NAME}}")
 typeset -x -g	      CLION_HOME=$(realFile "${Developer}/CLion.app")
+typeset -x -g	    ARDUINO_HOME=$(realFile "${MacPorts}/Arduino.app")
 typeset -x -g	    PROJECT_HOME=$(realFile "${PROJECT_HOME-${WORK}/Projects/${PROJECT_NAME}}")
+
+typeset -x -g   ARDUINO_SDK_PATH="${ARDUINO_HOME}/Contents/Java"
 
 path=(${PROJECT_HOME}/Utilities ${path})
 path=(${RUBYHOME}/bin ${path})
