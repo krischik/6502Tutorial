@@ -28,7 +28,6 @@ else
 
     # install brews
     #
-
     brew install		\
 	arduino-cli		\
 	cc65			\
@@ -37,6 +36,9 @@ else
 	git			\
 	git-credential-manager	\
 	git-flow		\
+	libusb			\
+	minipro			\
+	pkg-config		\
 	zsh			\
 	zsh-completions
 
@@ -49,6 +51,7 @@ else
     # configure brews
     #
     brew link macvim
+    brew link libusb
 
     echo "Login to «root»"
     sudo ${0:a}

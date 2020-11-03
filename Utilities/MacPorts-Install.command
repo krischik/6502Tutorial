@@ -16,13 +16,14 @@ if test "${USER}" = "root"; then
 
     for I in				    \
 	Arduino				    \
-	MacVim +cscope +huge +nls +tcl +xim \
 	cc65				    \
 	coreutils			    \
 	ctags				    \
 	git				    \
 	git-credential-manager		    \
 	git-flow			    \
+	MacVim +cscope +huge +nls +tcl +xim \
+	minipro				    \
 	vimproc				    \
 	zsh				    \
 	zsh-completions

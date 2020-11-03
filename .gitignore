@@ -1,17 +1,18 @@
-*.COM
-*.EXE
 *.car
 *.cfg
+*.COM
+*.EXE
 *.lst
+*.MAP
 *.o
-.backups
-*.swp
 *.s
+*.swp
+.backups
 .DS_Store
 .idea
-*.MAP
+cmake-build*
 Icon?
+Temp
 
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab : 
 # vim: set textwidth=0 filetype=conf foldmethod=marker nospell : 
-cmake-build*
