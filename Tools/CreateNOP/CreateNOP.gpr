@@ -41,6 +41,7 @@ project CreateNOP is
          "-Wall",
          "-ansi");
       for Default_Switches ("ada") use (
+         "-m64",
          "-gnat12",               -- Use Ada 2005 extensions
          "-gnatf",                -- Full errors. Verbose details, all undefined references
          "-gnatef",               -- Full source path in brief error messages
