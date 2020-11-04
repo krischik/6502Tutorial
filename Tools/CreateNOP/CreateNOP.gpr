@@ -1,0 +1,134 @@
+------------------------------------------------------------- 1{{{ ----------
+--  Copyright © 2020 … 2020  Martin Krischik «krischik@users.sourceforge.net»
+----------------------------------------------------------------------------
+--
+--  This library is free software; you can redistribute it and/or
+--  modify it under the terms of the GNU Library General Public
+--  License as published by the Free Software Foundation; either
+--  version 2 of the License, or (at your option) any later version.
+--
+--  This library is distributed in the hope that it will be useful,
+--  but WITHOUT ANY WARRANTY; without even the implied warranty of
+--  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+--  Library General Public License for more details.
+--
+--  You should have received a copy of the GNU Library General Public
+--  License along with this library; if not, write to the Free
+--  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+------------------------------------------------------------- 1}}} ----------
+
+project CreateNOP is
+   type Style_Type  is ("Debug"  , "Release");
+   type OS_Type     is ("Linux"  , "Windows_NT","macOS");
+
+   Style  : Style_Type  := external ("style" , "Release");
+   OS     : OS_Type     := external ("os"    , "macOS");
+
+   for Source_Dirs         use ("src/main/ada");
+   for Exec_Dir            use  "target";
+   for Object_Dir          use  "target/obj";
+   for Library_Dir         use  "target/lib";
+   for Library_Src_Dir     use  "target/lib";
+   for Languages           use ("Ada");
+   for Main                use ("createnop.adb");
+
+   Source_Files := (
+      "CreateNOP.adb");
+
+   package Compiler is
+      for Default_Switches ("C")  use (
+         "-fPIC",
+         "-Wall",
+         "-ansi");
+      for Default_Switches ("ada") use (
+         "-gnat12",               -- Use Ada 2005 extensions
+         "-gnatf",                -- Full errors. Verbose details, all undefined references
+         "-gnatef",               -- Full source path in brief error messages
+         "-gnatU",                -- Enable unique tag for error messages
+         "-gnatwcfijklmopruvz",   -- All warings enabled
+         "-gnatq",                -- Don't quit, try semantics, even if parse errors
+         "-gnatQ",                -- Don't quit, write ali/tree file even if compile errors
+         "-gnati1",               -- Select character set in sources.
+         "-gnatT4");              -- Compiler tables sizes 4* default
+
+      case OS is
+         when "Windows_NT" =>
+         when others =>
+            for Default_Switches ("ada") use
+            Compiler'Default_Switches ("ada") & (
+               "-fPIC");                      -- Position Independend Code
+         end case;
+
+      case Style is
+         when "Debug" =>
+            for Default_Switches ("C") use
+               Compiler'Default_Switches ("C") & (
+                  "-g");
+            for Default_Switches ("ada") use
+               Compiler'Default_Switches ("ada") & (
+                  "-gnata",          -- Enable Assersions.
+                  "-gnato",          -- Enable overflow checking
+                  "-gnatVcdfimorst", -- Enable selected validity checking mode
+                  "-g");             -- Debug info in binary.
+
+         when "Release" =>
+            for Default_Switches ("C") use
+               Compiler'Default_Switches ("C") & (
+                  "-O3");                        -- Optimisation "3"
+            for Default_Switches ("ada") use
+               Compiler'Default_Switches ("ada") & (
+                  "-O3",                         -- Optimisation "3"
+                  "-gnaty3abcefhiklnoprstM200"); -- Layout checks
+      end case;
+   end Compiler;
+
+   package Binder is
+      for Default_Switches ("ada") use ("-shared");
+
+      case Style is
+         when "Release" =>
+         when "Debug" =>
+            for Default_Switches ("ada") use
+               Binder'Default_Switches ("ada") & (
+                  "-E");         -- Tracebacks From Exception Occurrences
+      end case;
+   end Binder;
+
+   package Linker is
+      case Style is
+         when "Release" =>
+         when "Debug" =>
+            for Default_Switches ("ada") use ("-g");
+      end case;
+   end Linker;
+
+   package Naming is
+      for Specification_Suffix ("ada") use ".ads";
+      for Implementation_Suffix ("ada") use ".adb";
+      for Separate_Suffix use ".ada";
+   end Naming;
+
+   package Pretty_Printer is
+      for Default_Switches ("ada") use (
+         "-Dadacl.case",
+         "-v",
+         "-dd",
+         "-cl3",
+         "-M78",
+         "-cl3",
+         "-rf",
+         "-pM",
+         "-c3",
+         "-c4",
+         "-A1",
+         "-A2",
+         "-A3",
+         "-A4",
+         "-A5");
+   end Pretty_Printer;
+
+end CreateNOP;
+
+------------------------------------------------------------- 1{{{ ----------
+-- vim: set textwidth=0 nowrap tabstop=8 shiftwidth=3 softtabstop=3 expandtab :
+-- vim: set filetype=ada encoding=utf-8 fileformat=unix :
