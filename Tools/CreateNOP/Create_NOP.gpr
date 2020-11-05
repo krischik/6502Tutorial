@@ -1,6 +1,6 @@
-------------------------------------------------------------- 1{{{ ----------
+-------------------------------------------------------------------------------
 --  Copyright © 2020 … 2020  Martin Krischik «krischik@users.sourceforge.net»
-----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 --
 --  This library is free software; you can redistribute it and/or
 --  modify it under the terms of the GNU Library General Public
@@ -15,9 +15,9 @@
 --  You should have received a copy of the GNU Library General Public
 --  License along with this library; if not, write to the Free
 --  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-------------------------------------------------------------- 1}}} ----------
+------------------------------------------------------------- 1}}} -------------
 
-project CreateNOP is
+project Create_NOP is
    type Style_Type  is ("Debug"  , "Release");
    type OS_Type     is ("Linux"  , "Windows_NT","macOS");
 
@@ -30,10 +30,10 @@ project CreateNOP is
    for Library_Dir         use  "target/lib";
    for Library_Src_Dir     use  "target/lib";
    for Languages           use ("Ada");
-   for Main                use ("createnop.adb");
+   for Main                use ("Create_NOP.adb");
 
    Source_Files := (
-      "CreateNOP.adb");
+      "Create_NOP.adb");
 
    package Compiler is
       for Default_Switches ("C")  use (
@@ -111,25 +111,30 @@ project CreateNOP is
 
    package Pretty_Printer is
       for Default_Switches ("ada") use (
-         "-Dadacl.case",
-         "-v",
-         "-dd",
-         "-cl3",
-         "-M78",
-         "-cl3",
-         "-rf",
-         "-pM",
-         "-c3",
-         "-c4",
-         "-A1",
-         "-A2",
-         "-A3",
-         "-A4",
-         "-A5");
+         "--alignment",
+         "--attribute-mixed-case",
+         "--based-grouping=4",
+         "--call-threshold=3",
+         "--comments-unchanged",
+         "--decimal-grouping=3",
+         "--dictionary=../6502Tutorial.case",
+         "--enum-case-as-declared",
+         "--indent-continuation=3",
+         "--indentation=3",
+         "--max-line-length=120",
+         "--name-case-as-declared",
+         "--par-threshold=3",
+         "--pragma-mixed-case",
+         "--replace-force-backup",
+         "--type-case-as-declared",
+         "--use-on-new-line",
+         "--verbose",
+         "--wide-character-encoding=8",
+         "-dd");
    end Pretty_Printer;
 
-end CreateNOP;
+end Create_NOP;
 
-------------------------------------------------------------- 1{{{ ----------
--- vim: set textwidth=0 nowrap tabstop=8 shiftwidth=3 softtabstop=3 expandtab :
--- vim: set filetype=ada encoding=utf-8 fileformat=unix :
+-------------------------------------------------------------------------------
+-- vim: set nowrap tabstop=8 shiftwidth=3 softtabstop=3 expandtab :
+-- vim: set textwidth=0 filetype=ada foldmethod=expr nospell :
