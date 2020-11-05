@@ -39,7 +39,9 @@ typeset -x -g	       Developer="/Applications/Developer"
 typeset -x -g	    PROJECT_NAME="${PROJECT_NAME-6502Tutorial}"
 
 typeset -x -g	       Workspace=$(realFile "${Workspace-${WORK}/Workspaces/${PROJECT_NAME}}")
+typeset -x -g	       GNAT_HOME=$(realFile "/opt/GNAT/2020")
 typeset -x -g	      CLION_HOME=$(realFile "${Developer}/CLion.app")
+
 typeset -x -g	    ARDUINO_HOME=$(realFile "${MacPorts}/Arduino.app")
 typeset -x -g	    PROJECT_HOME=$(realFile "${PROJECT_HOME-${WORK}/Projects/${PROJECT_NAME}}")
 
@@ -47,6 +49,8 @@ typeset -x -g   ARDUINO_SDK_PATH="${ARDUINO_HOME}/Contents/Java"
 
 path=(${PROJECT_HOME}/Utilities ${path})
 path=(${RUBYHOME}/bin ${path})
+path=(${GNAT_HOME}/bin ${path})
+
 fpath=(${PROJECT_HOME}/Utilities ${fpath})
 rubylib=(${PROJECT_HOME}/Frameworks/Radiator/lib ${rubylib})
 
@@ -59,6 +63,22 @@ function lxpm ()
     fi;
     return;
 } # function
+
+function make ()
+{
+    path=(
+	"/opt/GNAT/2020/bin"
+    	"/bin"
+    	"/Volumes/Samsung/Work/Projects/6502Tutorial/Utilities"
+    	"/usr/bin"
+    	"/usr/sbin"
+    	"/sbin"
+    	"/opt/X11/bin"
+    	"/Applications/Server.app/Contents/ServerRoot/usr/bin"
+    	"/Applications/Server.app/Contents/ServerRoot/usr/sbin"
+    	"/Library/Apple/usr/bin"
+    	"/Library/Frameworks/Mono.framework/Versions/Current/Commands")
+}
 
 ############################################################ {{{1 ###########
 # vim: set wrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
