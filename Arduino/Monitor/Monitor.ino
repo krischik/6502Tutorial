@@ -24,11 +24,11 @@ class Bus
 {
 private:
     /**
-     * Size of bus (16 for address bus and 8 for data bus)
+     * Size of the 6502 bus (16 for address bus and 8 for data bus).
      */
-    size_t Size;
+    size_t const Size;
     /**
-     * Arduino I/O lines the bus is connected to
+     * Arduino I/O lines the 6502 bus is connected to.
      */
     byte const* Lines;
 
@@ -36,21 +36,21 @@ public:
     /**
      * initialise Bus.
      *
-     * @param Size Size of bus (16 for address bus and 8 for data bus)
-     * @param Lines Arduino I/O lines the bus is connected to
+     * @param Size of the 6502 bus (16 for address bus and 8 for data bus).
+     * @param Arduino I/O lines the 6502 bus is connected to.
      */
-    Bus (const byte Lines[], size_t Size)
+    Bus (const byte Lines[], size_t Size) :
+        Size (Size),
+        Lines (Lines)
     {
-        this->Size = Size;
-        this->Lines = Lines;
     } // Bus
 
     /**
-     * initialize the Arduino I/O lines used to monitor the bus to INPUT.
+     * initialize the Arduino I/O lines used to monitor the 6502 bus to INPUT.
      */
     void Init () const
     {
-        for (unsigned int i = 0;
+        for (size_t i = 0;
              i < Size;
              i++)
         {
@@ -69,7 +69,7 @@ public:
     {
         word Retval = 0;
 
-        for (unsigned int i = 0;
+        for (size_t i = 0;
              i < Size;
              i++)
         {
@@ -121,8 +121,8 @@ static byte const RWB = 3;
 extern void setup ()
 {
     Serial.begin (115200);
-    Serial.println();
-    Serial.println("Start 6502 Monitor");
+    Serial.println ();
+    Serial.println ("Start 6502 Monitor");
 
     // Setup address bus pins
     //
@@ -135,7 +135,7 @@ extern void setup ()
     // Setup clock pin
     //
     pinMode (PHI2, INPUT);
-    attachInterrupt (digitalPinToInterrupt(PHI2), On_Clock, RISING);
+    attachInterrupt (digitalPinToInterrupt (PHI2), On_Clock, RISING);
 
     // Setup read/write pin
     //
@@ -170,3 +170,4 @@ static void On_Clock ()
 /*********************************************************** {{{1 **********/
 /* vim: set nowrap tabstop=8 shiftwidth=2 softtabstop=2 expandtab : */
 /* vim: set textwidth=0 filetype=arduino foldmethod=marker nospell : */
+/* vim: set spell spelllang=en_gb : */

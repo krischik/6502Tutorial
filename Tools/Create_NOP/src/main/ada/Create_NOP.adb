@@ -45,7 +45,7 @@ begin
             raise;
       end;
 
-      for I in Integer range 1 .. Rom_Size loop
+      for I in 1 .. Rom_Size loop
          Byte_IO.Write (Byte_Output, NOP);
       end loop;
 
