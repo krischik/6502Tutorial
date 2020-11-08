@@ -64,21 +64,21 @@ function lxpm ()
     return;
 } # function
 
-function make ()
-{
-    path=(
-	"/opt/GNAT/2020/bin"
-    	"/bin"
-    	"/Volumes/Samsung/Work/Projects/6502Tutorial/Utilities"
-    	"/usr/bin"
-    	"/usr/sbin"
-    	"/sbin"
-    	"/opt/X11/bin"
-    	"/Applications/Server.app/Contents/ServerRoot/usr/bin"
-    	"/Applications/Server.app/Contents/ServerRoot/usr/sbin"
-    	"/Library/Apple/usr/bin"
-    	"/Library/Frameworks/Mono.framework/Versions/Current/Commands")
-}
+# function make ()
+# {
+    # path=(
+	# "/opt/GNAT/2020/bin"
+            # "/bin"
+            # "/Volumes/Samsung/Work/Projects/6502Tutorial/Utilities"
+            # "/usr/bin"
+            # "/usr/sbin"
+            # "/sbin"
+            # "/opt/X11/bin"
+            # "/Applications/Server.app/Contents/ServerRoot/usr/bin"
+            # "/Applications/Server.app/Contents/ServerRoot/usr/sbin"
+            # "/Library/Apple/usr/bin"
+            # "/Library/Frameworks/Mono.framework/Versions/Current/Commands")
+# }
 
 ############################################################ {{{1 ###########
 # vim: set wrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
