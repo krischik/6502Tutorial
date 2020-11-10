@@ -25,6 +25,7 @@ if test "${USER}" = "root"; then
 	MacVim +cscope +huge +nls +tcl +xim \
 	minipro				    \
 	vimproc				    \
+	wget				    \
 	zsh				    \
 	zsh-completions
 

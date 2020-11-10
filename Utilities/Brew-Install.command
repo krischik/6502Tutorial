@@ -39,6 +39,7 @@ else
 	libusb			\
 	minipro			\
 	pkg-config		\
+	wget			\
 	zsh			\
 	zsh-completions
 
