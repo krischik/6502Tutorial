@@ -16,3 +16,8 @@ A tutorial on cross compiling for the 6502 CPU on Atari and the Ben Eater 6502 K
   - [Day 8 – Create a ROM with only NOP operations](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-8.md)
   - [Day 9 – Start CPU](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-9.md)
   - [Day 10 – Attach ROM to CPU](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-10)
+  - [Day 11 – Add reset vectors to ROM](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-11)
+
+<!-- vim: set wrap tabstop=8 shiftwidth=4 softtabstop=4 expandtab : -->
+<!-- vim: set textwidth=0 filetype=markdown foldmethod=marker spell : -->
+<!-- vim: set spell spelllang=en_gb : -->

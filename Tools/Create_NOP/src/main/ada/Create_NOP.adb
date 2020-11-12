@@ -24,7 +24,6 @@ with Interfaces;
 
 procedure Create_NOP is
    type Byte is new Interfaces.Unsigned_8;
-   type Address is new Interfaces.Unsigned_16;
 
    package Byte_IO is new Ada.Sequential_IO (Byte);
 
