@@ -15,8 +15,8 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-Tool_Name := Create_NOP
-Rom_Name  := NOP.rom
+Tool_Name := Create_Reset
+Rom_Name  := Reset.rom
 
 all:					    \
     target/$(Tool_Name)
@@ -64,4 +64,5 @@ target/lib:
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-# vim: set textwidth=0 filetype=make foldmethod=marker nospell :
+# vim: set textwidth=0 filetype=make foldmethod=marker :
+# vim: set spell spelllang=en_gb :

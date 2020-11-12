@@ -1,1 +1,5 @@
 Create_NOP
+NOP
+NMIB
+RESB
+IRQB
