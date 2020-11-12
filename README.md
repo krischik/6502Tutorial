@@ -15,3 +15,4 @@ A tutorial on cross compiling for the 6502 CPU on Atari and the Ben Eater 6502 K
   - [Day 7 – CPU Monitor program](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-7.md)
   - [Day 8 – Create a ROM with only NOP operations](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-8.md)
   - [Day 9 – Start CPU](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-9.md)
+  - [Day 10 – Attach ROM to CPU](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-10)

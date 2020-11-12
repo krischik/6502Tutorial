@@ -15,52 +15,25 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-Tool_Name := Create_NOP
-Rom_Name  := NOP.rom
+Tool_Name := Create_Reset
+Rom_Name  := Reset.rom
 
-all:					    \
-    target/$(Tool_Name)
+all:
+	$(MAKE) --directory=Create_NOP	    all
+	$(MAKE) --directory=Create_Reset    all
 
-rom:					    \
-    target/$(Rom_Name)
+rom:					    
+	$(MAKE) --directory=Create_NOP	    rom
+	$(MAKE) --directory=Create_Reset    rom
 
-burn:					    \
-    target/$(Rom_Name)
-	minipro -p "AT28C256" -w $(<)
 
 pretty:
-	gnat pretty -P $(Tool_Name).gpr
+	$(MAKE) --directory=Create_NOP	    pretty
+	$(MAKE) --directory=Create_Reset    pretty
 
 clean:
-	gnat clean -P $(Tool_Name).gpr
-	-rm -r target
-	-rm src/main/ada/*.npp
-
-error1:					    \
-    target/$(Tool_Name)
-	target/$(Tool_Name) non_existing_directory/$(Rom_Name)
-
-target/$(Rom_Name):			    \
-    target/$(Tool_Name)
-	target/$(Tool_Name) $(@)
-
-target/$(Tool_Name):			    \
-    $(Tool_Name).gpr			    \
-    src/main/ada/$(Tool_Name).adb	    \
-    target				    \
-    target/obj				    \
-    target/lib
-	gnat make -Xstyle=Release -P $(<)	 || \
-	cat target/obj/$(Tool_Name).adb.stderr
-
-target:
-	mkdir $(@)
-
-target/obj:
-	mkdir $(@)
-
-target/lib:
-	mkdir $(@)
+	$(MAKE) --directory=Create_NOP	    clean
+	$(MAKE) --directory=Create_Reset    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
