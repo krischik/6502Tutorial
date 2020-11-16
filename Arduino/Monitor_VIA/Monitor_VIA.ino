@@ -18,7 +18,7 @@
 #include <USBAPI.h>
 
 /**
- * Bus class handles reading the 6050 address and data bus
+ * Bus class handles reading the 6502 address and data bus
  */
 class Bus
 {
@@ -111,20 +111,19 @@ static byte const PHI2 = 2;
 static void On_Clock ();
 
 /**
- * Read/Write pin
+ * VIA read/write pin. (read high, write low)
  */
 static byte const RWB = 3;
 
 /**
- * Read/Write pin
+ * VIA Chip select one pin. (active high)
  */
 static byte const CS1 = 4;
 
 /**
- * Read/Write pin
+ * VIA chip select two pin. (active low)
  */
 static byte const CS2B = 5;
-
 
 /**
  * Setup Arduino
@@ -171,7 +170,7 @@ static void On_Clock ()
     auto Data = D.Read ();
     auto Read_Write    = digitalRead (RWB)  == HIGH ? 'r' : 'W';
     auto Chip_Enable_1 = digitalRead (CS1)  == HIGH ? 'E' : 'd';
-    auto Chip_Enable_2 = digitalRead (CS2B) == LOW  ? 'E' : 'D';
+    auto Chip_Enable_2 = digitalRead (CS2B) == LOW  ? 'E' : 'd';
     char Output[15];
 
     snprintf (

@@ -15,25 +15,28 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-Tool_Name := Create_Reset
-Rom_Name  := Reset.rom
+Tool_Names := Create_NOP Create_Reset Create_LED
 
 all:
 	$(MAKE) --directory=Create_NOP	    all
 	$(MAKE) --directory=Create_Reset    all
+	$(MAKE) --directory=Create_LED	    all
 
 rom:					    
 	$(MAKE) --directory=Create_NOP	    rom
 	$(MAKE) --directory=Create_Reset    rom
+	$(MAKE) --directory=Create_LED	    rom
 
 
 pretty:
 	$(MAKE) --directory=Create_NOP	    pretty
 	$(MAKE) --directory=Create_Reset    pretty
+	$(MAKE) --directory=Create_LED	    pretty
 
 clean:
 	$(MAKE) --directory=Create_NOP	    clean
 	$(MAKE) --directory=Create_Reset    clean
+	$(MAKE) --directory=Create_LED	    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
