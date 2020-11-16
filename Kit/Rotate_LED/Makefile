@@ -15,25 +15,41 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-MEMORY
-{
-    ZP:		file = "", start = $0000, size = $0100;
-    RAM:	file = "", start = $0200, size = $7000;
-    ROM:	file = %O, start = $8000, size = $7FFA, fill = yes, fillval = $EA;
-    BRKINFO:	file = %O, start = $FFFA, size = $0006, fill = yes, fillval = $00;;
+Rom_Name  	:= Rotate_LED.rom
+Config_File	:= src/main/cfg/rom.cfg
+Object_Files	:= target/obj/Rotate_LED.o
+Map_File	:= target/Rotate_LED.map
 
-}
+rom:				\
+    target/$(Rom_Name)
 
-SEGMENTS
-{
-    ZEROPAGE:	load = ZP,	type = rw;
-    DATA:	load = RAM,	type = rw;
-    CODE:	load = ROM,	type = ro;
-    RODATA:	load = ROM,	type = ro;
-    HEADER:	load = BRKINFO,	type = ro;
-}
+burn:				\
+    target/$(Rom_Name)
+	minipro -p "AT28C256" -w $(<)
+
+clean:
+	-rm -r target
+
+target/$(Rom_Name):		\
+    ${Object_Files}		\
+    ${Config_File}
+	ld65 -C ${Config_File} --mapfile ${Map_File} -o $(@) ${Object_Files}
+
+target/obj/Rotate_LED.o:	\
+    src/main/asm/Rotate_LED.s	\
+    target			\
+    target/obj
+
+target/obj/%.o: src/main/asm/%.s
+	ca65 --cpu 65c02 -o $(@) $(<)
+
+target:
+	mkdir $(@)
+
+target/obj:
+	mkdir $(@)
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-# vim: set textwidth=0 filetype=cfg foldmethod=marker :
+# vim: set textwidth=0 filetype=make foldmethod=marker :
 # vim: set spell spelllang=en_gb :
