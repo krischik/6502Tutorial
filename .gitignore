@@ -1,22 +1,20 @@
+*.ali
 *.car
-*.cfg
 *.COM
 *.EXE
 *.lst
 *.MAP
+*.npp
 *.o
-*.s
 *.swp
 .backups
 .DS_Store
 .idea
+b~c*
 cmake-build*
 Icon?
+target
 Temp
-
+#
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab : 
 # vim: set textwidth=0 filetype=conf foldmethod=marker nospell : 
-target
-*.ali
-b~c*
-*.npp

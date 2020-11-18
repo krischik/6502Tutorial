@@ -15,29 +15,21 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-.PHONY: all rom clean pretty
+.PHONY: all rom clean
 
-Tool_Names := Create_NOP Create_Reset Create_LED
+Tool_Names := Blink_LED Rotate_LED
 
 all:
-	$(MAKE) --directory=Create_NOP	    all
-	$(MAKE) --directory=Create_Reset    all
-	$(MAKE) --directory=Create_LED	    all
+	$(MAKE) --directory=Blink_LED	    all
+	$(MAKE) --directory=Rotate_LED      all
 
 rom:
-	$(MAKE) --directory=Create_NOP	    rom
-	$(MAKE) --directory=Create_Reset    rom
-	$(MAKE) --directory=Create_LED	    rom
-
-pretty:
-	$(MAKE) --directory=Create_NOP	    pretty
-	$(MAKE) --directory=Create_Reset    pretty
-	$(MAKE) --directory=Create_LED	    pretty
+	$(MAKE) --directory=Blink_LED	    rom
+	$(MAKE) --directory=Rotate_LED	    rom
 
 clean:
-	$(MAKE) --directory=Create_NOP	    clean
-	$(MAKE) --directory=Create_Reset    clean
-	$(MAKE) --directory=Create_LED	    clean
+	$(MAKE) --directory=Blink_LED	    clean
+	$(MAKE) --directory=Rotate_LED	    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
