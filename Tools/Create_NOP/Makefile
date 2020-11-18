@@ -15,6 +15,8 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
+.PHONY: all rom burn clean pretty
+
 Tool_Name := Create_NOP
 Rom_Name  := NOP.rom
 

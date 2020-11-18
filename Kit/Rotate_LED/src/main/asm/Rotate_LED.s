@@ -22,32 +22,62 @@ NMIB	    =	    $FFFA
 RESB	    =	    $FFFC
 IRQB	    =	    $FFFE
 
-.macro	    Set_B   value
-	    LDA	    value
+;;
+;   Set VIA data directon register B
+;
+.macro	    Set_B   Value
+.ifnblank	    Value
+	    LDA	    Value
+.endif
 	    STA	    DDRB
 .endmacro
 
-.macro	    Out_B   value
-	    LDA	    value
+;;
+;   Set VIA output register B
+;
+.macro	    Out_B   Value
+.ifnblank	    Value
+	    LDA	    Value
+.endif
 	    STA	    ORB
+.endmacro
+
+;;
+;   Logical rotate right accumulator
+;
+.macro	    L_ROR
+.local	    Skip
+	    LSR
+	    BCC	    Skip
+	    ORA	    #$80
+Skip:
+.endmacro
+
+;;
+;   Logical rotate left accumulator
+;
+.macro	    L_ROL
+	    ASL
+	    ADC	    #0
 .endmacro
 
 .segment    "CODE"
 
-DO_RES:	    Set_B   #$FF
+Do_RES:	    Set_B   #$FF
 	    Out_B   #$50
-	    
-loop:	    ROR
-	    BRA	    loop
 
-DO_NMI:	    RTI
+Loop:	    L_ROR
+	    Out_B
+	    BRA	    Loop
 
-DO_IRQ:	    RTI
+Do_NMI:	    RTI
+
+Do_IRQ:	    RTI
 
 .segment    "HEADER"
-.word	    DO_NMI
-.word	    DO_RES
-.word	    DO_IRQ
+.word	    Do_NMI
+.word	    Do_RES
+.word	    Do_IRQ
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

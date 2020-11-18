@@ -15,12 +15,14 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-Rom_Name  	:= Blink_LED.rom
+.PHONY: all rom burn clean
+
+Rom_Name	:= Blink_LED.rom
 Config_File	:= src/main/cfg/rom.cfg
 Object_Files	:= target/obj/Blink_LED.o
 Map_File	:= target/Blink_LED.map
 
-rom:				\
+all rom:			\
     target/$(Rom_Name)
 
 burn:				\
