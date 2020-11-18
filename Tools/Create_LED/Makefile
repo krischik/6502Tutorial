@@ -15,8 +15,10 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
+.PHONY: all rom burn clean pretty
+
 Tool_Name := Create_LED
-Rom_Name  := Reset.rom
+Rom_Name  := LED.rom
 
 all:					    \
     target/$(Tool_Name)

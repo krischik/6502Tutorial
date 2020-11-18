@@ -16,46 +16,57 @@
 ############################################################# }}}1 ##########
 
 .PHONY: all clean run
-.SUFFIXES:
 
-Exe_File	= HELLO.COM
-Object_Files	= HelloWorld.o
+Exe_File	= target/HELLO.COM
+Object_Files	= target/obj/HelloWorld.o
+Map_File	= target/HELLO.MAP
 System_Files	= "/opt/local/share/atari800"
 User_Files	= "$(HOME)/Library/Application\ Support/Atari800"
 
 all: $(Exe_File)
 
-clean: 
-	rm -v *.COM *.o *.s
+clean:
+	rm -r target
 
 run: $(Exe_File)
-	/usr/local/bin/atari800				\
-	    -autosave-config				\
-	    -cart-type 1				\
-	    -hreadwrite					\
-	    -video-accel				\
-	    -320xe					\
-	    -nobasic					\
-	    -pal					\
-	    -win-height	    1120			\
-	    -win-width	    1680			\
-	    -config	"$(CURDIR)/HelloWorld.cfg"	\
-	    -H1		"$(CURDIR)"			\
-	    -xlxe_rom	"$(System_Files)/ATARIXL.ROM"	\
+	/usr/local/bin/atari800					\
+	    -autosave-config					\
+	    -cart-type 1					\
+	    -hreadwrite						\
+	    -video-accel					\
+	    -320xe						\
+	    -nobasic						\
+	    -pal						\
+	    -win-height	    1120				\
+	    -win-width	    1680				\
+	    -config	"$(CURDIR)/target/HelloWorld.cfg"	\
+	    -H1		"$(CURDIR)/target"			\
+	    -xlxe_rom	"$(System_Files)/ATARIXL.ROM"		\
 	    "$(User_Files)/Disks/CC65-Development.xfd"
 
 $(Exe_File): ${Object_Files}
-	ld65 --target atari --mapfile HELLO.MAP -o $(@) $(+) --lib atari.lib
+	ld65 --target atari --mapfile ${Map_File} -o $(@) $(+) --lib atari.lib
 
-HelloWorld.o: HelloWorld.s
+target/obj/HelloWorld.o:	\
+    target/asm/HelloWorld.s	\
+    target/obj
 
-HelloWorld.s: HelloWorld.c
+target/asm/HelloWorld.s:	\
+    src/main/c/HelloWorld.c	\
+    target/asm
 
-%.o: %.s
+target/obj/%.o: target/asm/%.s
 	ca65 --target atari -o $(@) $(<)
 
-%.s: %.c
+target/asm/%.s: src/main/c/%.c
 	cc65 --target atari -o $(@) $(<)
 
+target/obj:
+	mkdir -p $(@)
+
+target/asm:
+	mkdir -p $(@)
+
+############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=0 noexpandtab :
 # vim: set textwidth=0 filetype=make foldmethod=marker nospell :

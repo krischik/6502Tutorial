@@ -15,30 +15,43 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-.PHONY: all rom clean pretty
+.PHONY: all rom burn clean
 
-Tool_Names := Create_NOP Create_Reset Create_LED
+Rom_Name	:= Rotate_LED.rom
+Config_File	:= src/main/cfg/rom.cfg
+Object_Files	:= target/obj/Rotate_LED.o
+Map_File	:= target/Rotate_LED.map
 
-all:
-	$(MAKE) --directory=Create_NOP	    all
-	$(MAKE) --directory=Create_Reset    all
-	$(MAKE) --directory=Create_LED	    all
+all rom:			\
+    target/$(Rom_Name)
 
-rom:
-	$(MAKE) --directory=Create_NOP	    rom
-	$(MAKE) --directory=Create_Reset    rom
-	$(MAKE) --directory=Create_LED	    rom
-
-pretty:
-	$(MAKE) --directory=Create_NOP	    pretty
-	$(MAKE) --directory=Create_Reset    pretty
-	$(MAKE) --directory=Create_LED	    pretty
+burn:				\
+    target/$(Rom_Name)
+	minipro -p "AT28C256" -w $(<)
 
 clean:
-	$(MAKE) --directory=Create_NOP	    clean
-	$(MAKE) --directory=Create_Reset    clean
-	$(MAKE) --directory=Create_LED	    clean
+	-rm -r target
+
+target/$(Rom_Name):		\
+    ${Object_Files}		\
+    ${Config_File}
+	ld65 -C ${Config_File} --mapfile ${Map_File} -o $(@) ${Object_Files}
+
+target/obj/Rotate_LED.o:	\
+    src/main/asm/Rotate_LED.s	\
+    target			\
+    target/obj
+
+target/obj/%.o: src/main/asm/%.s
+	ca65 --cpu 65c02 -o $(@) $(<)
+
+target:
+	mkdir $(@)
+
+target/obj:
+	mkdir $(@)
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-# vim: set textwidth=0 filetype=make foldmethod=marker nospell :
+# vim: set textwidth=0 filetype=make foldmethod=marker :
+# vim: set spell spelllang=en_gb :
