@@ -15,12 +15,14 @@
 ;  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ;############################################################ }}}1 ##########
 
+.pc02
+.listbytes  16
+.pagelength 66
+.case	    +
+
+.segment    "VIA"
 ORB	    =	    $7F00
 DDRB	    =	    $7F02
-
-NMIB	    =	    $FFFA
-RESB	    =	    $FFFC
-IRQB	    =	    $FFFE
 
 .macro	    Set_B   value
 	    LDA	    value
