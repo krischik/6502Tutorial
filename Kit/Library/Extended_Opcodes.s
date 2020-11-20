@@ -38,7 +38,7 @@ Skip:
 ;;
 ; Arithmetic shift right accumulator
 ;
-.macro	    ASR             
+.macro	    ASR
 	    CMP     #$80    ; Put bit 7 into carry
 	    ROR             ; Rotate right with carry
 .endmacro

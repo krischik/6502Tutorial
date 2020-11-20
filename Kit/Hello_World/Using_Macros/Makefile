@@ -59,8 +59,8 @@ target/obj/Hello_World.o:		    \
 
 target/obj/%.o: src/main/asm/%.s
 	ca65				    \
-	    -W1		    		    \
-	    --cpu "65c02"   		    \
+	    -W1				    \
+	    --cpu "65c02"		    \
 	    --include-dir $(Include_Dir)    \
 	    --listing $(basename $(@)).lst  \
 	    -o $(@)			    \

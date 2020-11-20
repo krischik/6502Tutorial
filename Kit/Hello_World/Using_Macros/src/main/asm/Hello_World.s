@@ -112,6 +112,7 @@ Do_RES:	    Set_A	#%11100000		; Set top 3 pin as output
 	    Control_LCD	#%00111000		; Set 8-bit mode; 2 line display; 5×8 font
 	    Control_LCD	#%00001110		; Display in; cursor on; blink off
 	    Control_LCD	#%00000110		; Increment and shift cursor; don't shift display
+	    Control_LCD	#%00000001		; Clear Display
 
 	    Data_LCD	#'H'			; Send character 'H' to display
 	    Data_LCD	#'e'			; Send character 'e' to display
