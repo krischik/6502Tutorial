@@ -15,71 +15,29 @@
 ;  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ;############################################################ }}}1 ##########
 
-.pc02
-.listbytes  16
-.pagelength 66
-.case	    +
-
+;;
+; VIA register
+;
 .segment    "VIA"
-ORB	    =	    $7F00
-DDRB	    =	    $7F02
-
-;;
-;   Set VIA data directon register B
-;
-.macro	    Set_B   Value
-.ifnblank	    Value
-	    LDA	    Value
-.endif
-	    STA	    DDRB
-.endmacro
-
-;;
-;   Set VIA output register B
-;
-.macro	    Out_B   Value
-.ifnblank	    Value
-	    LDA	    Value
-.endif
-	    STA	    ORB
-.endmacro
-
-;;
-;   Logical rotate right accumulator
-;
-.macro	    L_ROR
-.local	    Skip
-	    LSR
-	    BCC	    Skip
-	    ORA	    #$80
-Skip:
-.endmacro
-
-;;
-;   Logical rotate left accumulator
-;
-.macro	    L_ROL
-	    ASL
-	    ADC	    #0
-.endmacro
-
-.segment    "CODE"
-
-Do_RES:	    Set_B   #$FF
-	    Out_B   #$50
-
-Loop:	    L_ROR
-	    Out_B
-	    BRA	    Loop
-
-Do_NMI:	    RTI
-
-Do_IRQ:	    RTI
-
-.segment    "HEADER"
-.word	    Do_NMI
-.word	    Do_RES
-.word	    Do_IRQ
+.struct	    VIA
+	    .ORG    $7F00
+IORB	    .byte	       ; Output Register "B" Input Register "B"
+IORA	    .byte	       ; Output Register "A" Input Register "A"
+DDRB	    .byte	       ; Data Direction Register "B"
+DDRA	    .byte	       ; Data Direction Register "A"
+T1C_L	    .byte	       ; T1 Low-Order
+T1C_H	    .byte	       ; T1 High-Order Counter
+T1L_L	    .byte	       ; T1 Low-Order Latches
+T1L_H	    .byte	       ; T1 High-Order Latches
+T2C_L	    .byte	       ; T2 Low-Order
+T2C_H	    .byte	       ; T2 High-Order Counter
+SR	    .byte	       ; Shift Register
+ACR	    .byte	       ; Auxiliary Control Register
+PCR	    .byte	       ; Peripheral Control Register
+IFR	    .byte	       ; Interrupt Flag Register
+IER	    .byte	       ; Interrupt Enable Register
+RA	    .byte	       ; Same as Reg 1 except no "Handshake"
+.endstruct
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

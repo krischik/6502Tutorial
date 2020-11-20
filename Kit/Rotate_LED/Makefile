@@ -18,32 +18,54 @@
 .PHONY: all rom burn clean
 
 Rom_Name	:= Rotate_LED.rom
-Config_File	:= src/main/cfg/rom.cfg
+Include_Dir     := ../Library
+Config_File	:= rom.cfg
 Object_Files	:= target/obj/Rotate_LED.o
 Map_File	:= target/Rotate_LED.map
 
-all rom:			\
+all rom:				    \
     target/$(Rom_Name)
 
-burn:				\
+burn:					    \
     target/$(Rom_Name)
 	minipro -p "AT28C256" -w $(<)
 
 clean:
 	-rm -r target
 
-target/$(Rom_Name):		\
-    ${Object_Files}		\
-    ${Config_File}
-	ld65 -C ${Config_File} --mapfile ${Map_File} -o $(@) ${Object_Files}
+dump_rom:				    \
+    target/$(Rom_Name)
+	hexdump -C $(<)
 
-target/obj/Rotate_LED.o:	\
-    src/main/asm/Rotate_LED.s	\
-    target			\
+list_rom:				    \
+    target/$(Rom_Name)
+	da65 --cpu "65C02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
+
+
+target/$(Rom_Name):			    \
+    ${Object_Files}
+	ld65				    \
+	    --obj-path	$(Include_Dir)	    \
+	    --lib-path	$(Include_Dir)	    \
+	    --cfg-path	$(Include_Dir)	    \
+	    --config	${Config_File}	    \
+	    --mapfile	${Map_File}	    \
+	    -o $(@)			    \
+	    ${+}
+
+target/obj/Rotate_LED.o:		    \
+    src/main/asm/Rotate_LED.s		    \
+    target				    \
     target/obj
 
 target/obj/%.o: src/main/asm/%.s
-	ca65 --cpu 65c02 -o $(@) $(<)
+	ca65				    \
+	    -W3				    \
+	    --cpu "65c02"		    \
+	    --include-dir $(Include_Dir)    \
+	    --listing $(basename $(@)).lst  \
+	    -o $(@)			    \
+	    $(<)
 
 target:
 	mkdir $(@)

@@ -15,39 +15,10 @@
 ;  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ;############################################################ }}}1 ##########
 
-.pc02
-.listbytes  16
-.pagelength 66
-.case	    +
-
-.segment    "VIA"
-ORB	    =	    $7F00
-DDRB	    =	    $7F02
-
-;;
-;   Set VIA data directon register B
-;
-.macro	    Set_B   Value
-.ifnblank	    Value
-	    LDA	    Value
-.endif
-	    STA	    DDRB
-.endmacro
-
-;;
-;   Set VIA output register B
-;
-.macro	    Out_B   Value
-.ifnblank	    Value
-	    LDA	    Value
-.endif
-	    STA	    ORB
-.endmacro
-
 ;;
 ;   Logical rotate right accumulator
 ;
-.macro	    L_ROR
+.macro	    LRR
 .local	    Skip
 	    LSR
 	    BCC	    Skip
@@ -58,28 +29,19 @@ Skip:
 ;;
 ;   Logical rotate left accumulator
 ;
-.macro	    L_ROL
+.macro	    LRL
 	    ASL
-	    ADC	    #0
+	    ADC	    #$00
 .endmacro
 
-.segment    "CODE"
 
-Do_RES:	    Set_B   #$FF
-	    Out_B   #$50
-
-Loop:	    L_ROR
-	    Out_B
-	    BRA	    Loop
-
-Do_NMI:	    RTI
-
-Do_IRQ:	    RTI
-
-.segment    "HEADER"
-.word	    Do_NMI
-.word	    Do_RES
-.word	    Do_IRQ
+;;
+; Arithmetic shift right accumulator
+;
+.macro	    ASR
+	    CMP     #$80    ; Put bit 7 into carry
+	    ROR             ; Rotate right with carry
+.endmacro
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
