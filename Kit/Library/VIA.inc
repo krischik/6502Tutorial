@@ -19,25 +19,58 @@
 ; VIA register
 ;
 .segment    "VIA"
+
 .struct	    VIA
-	    .ORG    $7F00
-IORB	    .byte	       ; Output Register "B" Input Register "B"
-IORA	    .byte	       ; Output Register "A" Input Register "A"
-DDRB	    .byte	       ; Data Direction Register "B"
-DDRA	    .byte	       ; Data Direction Register "A"
-T1C_L	    .byte	       ; T1 Low-Order
-T1C_H	    .byte	       ; T1 High-Order Counter
-T1L_L	    .byte	       ; T1 Low-Order Latches
-T1L_H	    .byte	       ; T1 High-Order Latches
-T2C_L	    .byte	       ; T2 Low-Order
-T2C_H	    .byte	       ; T2 High-Order Counter
-SR	    .byte	       ; Shift Register
-ACR	    .byte	       ; Auxiliary Control Register
-PCR	    .byte	       ; Peripheral Control Register
-IFR	    .byte	       ; Interrupt Flag Register
-IER	    .byte	       ; Interrupt Enable Register
-RA	    .byte	       ; Same as Reg 1 except no "Handshake"
+	    .ORG	$7F00
+IORB	    .byte			; Output Register "B" Input Register "B"
+IORA	    .byte			; Output Register "A" Input Register "A"
+DDRB	    .byte			; Data Direction Register "B"
+DDRA	    .byte			; Data Direction Register "A"
+T1C_L	    .byte			; T1 Low-Order
+T1C_H	    .byte			; T1 High-Order Counter
+T1L_L	    .byte			; T1 Low-Order Latches
+T1L_H	    .byte			; T1 High-Order Latches
+T2C_L	    .byte			; T2 Low-Order
+T2C_H	    .byte			; T2 High-Order Counter
+SR	    .byte			; Shift Register
+ACR	    .byte			; Auxiliary Control Register
+PCR	    .byte			; Peripheral Control Register
+IFR	    .byte			; Interrupt Flag Register
+IER	    .byte			; Interrupt Enable Register
+RA	    .byte			; Same as Reg 1 except no "Handshake"
 .endstruct
+
+;;
+;   Set VIA data direction register A
+;
+.macro	    Set_A	Value
+	    LDA		Value
+	    STA		VIA::DDRA
+.endmacro
+
+;;
+;   Set VIA data direction register B
+;
+.macro	    Set_B	Value
+	    LDA		Value
+	    STA		VIA::DDRB
+.endmacro
+
+;;
+;   Set VIA output register A
+;
+.macro	    Out_A	Value
+	    LDA		Value
+	    STA		VIA::IORA
+.endmacro
+
+;;
+;   Set VIA output register B
+;
+.macro	    Out_B	Value
+	    LDA		Value
+	    STA		VIA::IORB
+.endmacro
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

@@ -29,7 +29,7 @@ pushd "${PROJECT_HOME}"
     fi
 
     minipro -p "AT28C256" -r "Temp/AT28C256.bin"
-    hexdump "Temp/AT28C256.bin"
+    hexdump -C "Temp/AT28C256.bin"
 popd
 
 ############################################################## {{{1 ##########
