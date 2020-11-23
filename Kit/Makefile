@@ -22,14 +22,17 @@ Tool_Names := Blink_LED Rotate_LED
 all:
 	$(MAKE) --directory=Blink_LED	    all
 	$(MAKE) --directory=Rotate_LED      all
+	$(MAKE) --directory=Hello_World	    all
 
 rom:
 	$(MAKE) --directory=Blink_LED	    rom
-	$(MAKE) --directory=Rotate_LED	    rom
+	$(MAKE) --directory=Rotate_LED      rom
+	$(MAKE) --directory=Hello_World	    rom
 
 clean:
 	$(MAKE) --directory=Blink_LED	    clean
-	$(MAKE) --directory=Rotate_LED	    clean
+	$(MAKE) --directory=Rotate_LED      clean
+	$(MAKE) --directory=Hello_World	    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

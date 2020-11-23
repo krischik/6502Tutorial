@@ -15,71 +15,36 @@
 ;  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ;############################################################ }}}1 ##########
 
-.pc02
-.listbytes  16
-.pagelength 66
-.case	    +
+;;
+; LCD Display
+;
+.scope	    LCD
 
-.segment    "VIA"
-ORB	    =	    $7F00
-DDRB	    =	    $7F02
+E	    =		%10000000
+RW	    =		%01000000
+RS	    =		%00100000
 
 ;;
-;   Set VIA data directon register B
+;   Send Data to LCD display
 ;
-.macro	    Set_B   Value
-.ifnblank	    Value
-	    LDA	    Value
-.endif
-	    STA	    DDRB
+.macro	    Control_LCD	Instruction
+	    Out_B	{Instruction}
+	    Out_A	#0			; Clear RS, RW, E bits
+	    Out_A	#LCD::E			; Set E bit to send instruction
+	    Out_A	#0			; Clear E bit
 .endmacro
 
 ;;
-;   Set VIA output register B
+;   Send Data to LCD display
 ;
-.macro	    Out_B   Value
-.ifnblank	    Value
-	    LDA	    Value
-.endif
-	    STA	    ORB
+.macro	    Data_LCD	Data
+	    Out_B	{Data}
+	    Out_A	#LCD::RS		; Set RS, Clear RW, E bits
+	    Out_A	#(LCD::RS | LCD::E)	; Set E bit to send data
+	    Out_A	#LCD::RS		; Clear E bit
 .endmacro
 
-;;
-;   Logical rotate right accumulator
-;
-.macro	    L_ROR
-.local	    Skip
-	    LSR
-	    BCC	    Skip
-	    ORA	    #$80
-Skip:
-.endmacro
-
-;;
-;   Logical rotate left accumulator
-;
-.macro	    L_ROL
-	    ASL
-	    ADC	    #0
-.endmacro
-
-.segment    "CODE"
-
-Do_RES:	    Set_B   #$FF
-	    Out_B   #$50
-
-Loop:	    L_ROR
-	    Out_B
-	    BRA	    Loop
-
-Do_NMI:	    RTI
-
-Do_IRQ:	    RTI
-
-.segment    "HEADER"
-.word	    Do_NMI
-.word	    Do_RES
-.word	    Do_IRQ
+.endscope
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

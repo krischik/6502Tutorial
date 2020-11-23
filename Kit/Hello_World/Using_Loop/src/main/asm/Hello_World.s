@@ -18,59 +18,37 @@
 .pc02
 .listbytes  16
 .pagelength 66
-.case	    +
+.case	    -
 
-.segment    "VIA"
-ORB	    =	    $7F00
-DDRB	    =	    $7F02
+.macpack    generic
+.include    "VIA.inc"
+.include    "LCD.inc"
 
-;;
-;   Set VIA data directon register B
-;
-.macro	    Set_B   Value
-.ifnblank	    Value
-	    LDA	    Value
-.endif
-	    STA	    DDRB
-.endmacro
+.segment    "RODATA"
 
-;;
-;   Set VIA output register B
-;
-.macro	    Out_B   Value
-.ifnblank	    Value
-	    LDA	    Value
-.endif
-	    STA	    ORB
-.endmacro
-
-;;
-;   Logical rotate right accumulator
-;
-.macro	    L_ROR
-.local	    Skip
-	    LSR
-	    BCC	    Skip
-	    ORA	    #$80
-Skip:
-.endmacro
-
-;;
-;   Logical rotate left accumulator
-;
-.macro	    L_ROL
-	    ASL
-	    ADC	    #0
-.endmacro
+Message:    .byte	"Hello World!"
+Message_Len =		* - Message
 
 .segment    "CODE"
 
-Do_RES:	    Set_B   #$FF
-	    Out_B   #$50
+Do_RES:	    LDX		#$FF
+	    TXS
 
-Loop:	    L_ROR
-	    Out_B
-	    BRA	    Loop
+	    Set_A	#%11100000		; Set top 3 pin as output
+	    Set_B	#%11111111		; Set all pins as output
+
+	    Control_LCD	#%00111000		; Set 8-bit mode; 2 line display; 5×8 font
+	    Control_LCD	#%00001110		; Display in; cursor on; blink off
+	    Control_LCD	#%00000110		; Increment and shift cursor; don't shift display
+	    Control_LCD	#%00000001		; Clear Display
+
+	    LDX		#$00
+Loop:	    Data_LCD	{Message,X}		; Write next character to Display
+	    INX
+	    CPX		#(Message_Len)		; Repeat lopp until X ≥ message lenght
+	    BLT		Loop
+
+	    STP					; Stop Processor
 
 Do_NMI:	    RTI
 
@@ -84,3 +62,4 @@ Do_IRQ:	    RTI
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
 ; vim: set textwidth=0 filetype=asm foldmethod=marker nospell :
+; vim: set spell spelllang=en_gb :

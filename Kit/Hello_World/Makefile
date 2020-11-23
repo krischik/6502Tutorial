@@ -15,24 +15,19 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-MEMORY
-{
-    ZP:		file = "", start = $0000, size = $0100;
-    RAM:	file = "", start = $0200, size = $7000;
-    ROM:	file = %O, start = $8000, size = $7FFA, fill = yes, fillval = $EA;
-    BRKINFO:	file = %O, start = $FFFA, size = $0006, fill = yes, fillval = $00;
-}
+.PHONY: all rom clean
 
-SEGMENTS
-{
-    ZEROPAGE:	load = ZP,	type = rw;
-    DATA:	load = RAM,	type = rw;
-    CODE:	load = ROM,	type = ro;
-    RODATA:	load = ROM,	type = ro;
-    HEADER:	load = BRKINFO,	type = ro;
-}
+Tool_Names := Using_Macros
+
+all:
+	$(MAKE) --directory=Using_Macros    all
+
+rom:
+	$(MAKE) --directory=Using_Macro	    rom
+
+clean:
+	$(MAKE) --directory=Using_Macros    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-# vim: set textwidth=0 filetype=cfg foldmethod=marker :
-# vim: set spell spelllang=en_gb :
+# vim: set textwidth=0 filetype=make foldmethod=marker nospell :

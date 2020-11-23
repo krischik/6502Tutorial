@@ -15,13 +15,13 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-.PHONY: all rom burn clean
+.PHONY: all rom burn clean dump_rom list_rom
 
-Rom_Name	:= Blink_LED.rom
-Include_Dir     := ../Library
+Rom_Name	:= Hello_World.rom
+Include_Dir     := ../../Library
 Config_File	:= rom.cfg
-Object_Files	:= target/obj/Blink_LED.o
-Map_File	:= target/Blink_LED.map
+Object_Files	:= target/obj/Hello_World.o
+Map_File	:= target/Hello_World.map
 
 all rom:				    \
     target/$(Rom_Name)
@@ -39,8 +39,7 @@ dump_rom:				    \
 
 list_rom:				    \
     target/$(Rom_Name)
-	da65 --cpu "65c02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
-
+	da65 --cpu "65C02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
 
 target/$(Rom_Name):			    \
     ${Object_Files}
@@ -53,14 +52,14 @@ target/$(Rom_Name):			    \
 	    -o $(@)			    \
 	    ${+}
 
-target/obj/Blink_LED.o:			    \
-    src/main/asm/Blink_LED.s		    \
+target/obj/Hello_World.o:		    \
+    src/main/asm/Hello_World.s		    \
     target				    \
     target/obj
 
 target/obj/%.o: src/main/asm/%.s
 	ca65				    \
-	    -W3				    \
+	    -W1				    \
 	    --cpu "65c02"		    \
 	    --include-dir $(Include_Dir)    \
 	    --listing $(basename $(@)).lst  \
