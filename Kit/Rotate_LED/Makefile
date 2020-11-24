@@ -15,7 +15,7 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-.PHONY: all rom burn clean
+.PHONY: all rom burn clean rom_dump rom_list
 
 Rom_Name	:= Rotate_LED.rom
 Include_Dir     := ../Library
@@ -33,14 +33,13 @@ burn:					    \
 clean:
 	-rm -r target
 
-dump_rom:				    \
+rom_dump:				    \
     target/$(Rom_Name)
 	hexdump -C $(<)
 
-list_rom:				    \
+rom_list:				    \
     target/$(Rom_Name)
 	da65 --cpu "65C02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
-
 
 target/$(Rom_Name):			    \
     ${Object_Files}
