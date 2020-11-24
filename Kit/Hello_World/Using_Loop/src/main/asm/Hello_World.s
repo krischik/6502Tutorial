@@ -34,16 +34,16 @@ Message_Len =		* - Message
 Do_RES:	    LDX		#$FF
 	    TXS
 
-	    Set_A	#%11100000		; Set top 3 pin as output
-	    Set_B	#%11111111		; Set all pins as output
+	    VIA_Set_A	#%11100000		; Set top 3 pin as output
+	    VIA_Set_B	#%11111111		; Set all pins as output
 
-	    Control_LCD	#%00111000		; Set 8-bit mode; 2 line display; 5×8 font
-	    Control_LCD	#%00001110		; Display in; cursor on; blink off
-	    Control_LCD	#%00000110		; Increment and shift cursor; don't shift display
-	    Control_LCD	#%00000001		; Clear Display
+	    LCD_Control	#%00111000		; Set 8-bit mode; 2 line display; 5×8 font
+	    LCD_Control	#%00001110		; Display in; cursor on; blink off
+	    LCD_Control	#%00000110		; Increment and shift cursor; don't shift display
+	    LCD_Control	#%00000001		; Clear Display
 
 	    LDX		#$00
-Loop:	    Data_LCD	{Message,X}		; Write next character to Display
+Loop:	    LCD_Data	{Message,X}		; Write next character to Display
 	    INX
 	    CPX		#(Message_Len)		; Repeat lopp until X ≥ message lenght
 	    BLT		Loop

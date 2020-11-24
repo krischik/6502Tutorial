@@ -43,32 +43,40 @@ RA	    .byte			; Same as Reg 1 except no "Handshake"
 ;;
 ;   Set VIA data direction register A
 ;
-.macro	    Set_A	Value
+.macro	    VIA_Set_A	Value
+.ifnblank   Value
 	    LDA		Value
+.endif
 	    STA		VIA::DDRA
 .endmacro
 
 ;;
 ;   Set VIA data direction register B
 ;
-.macro	    Set_B	Value
+.macro	    VIA_Set_B	Value
+.ifnblank   Value
 	    LDA		Value
+.endif
 	    STA		VIA::DDRB
 .endmacro
 
 ;;
 ;   Set VIA output register A
 ;
-.macro	    Out_A	Value
+.macro	    VIA_Out_A	Value
+.ifnblank   Value
 	    LDA		Value
+.endif
 	    STA		VIA::IORA
 .endmacro
 
 ;;
 ;   Set VIA output register B
 ;
-.macro	    Out_B	Value
+.macro	    VIA_Out_B	Value
+.ifnblank   Value
 	    LDA		Value
+.endif
 	    STA		VIA::IORB
 .endmacro
 
