@@ -24,7 +24,7 @@ E	    =		%10000000
 RW	    =		%01000000
 RS	    =		%00100000
 
-.if	.defined(MACRO_ONY)
+.if	    .defined(MACRO_ONY)
 
 ;;
 ;   Send Data to LCD display
@@ -35,8 +35,6 @@ RS	    =		%00100000
 	    VIA_Out_A	#LCD::E			; Set E bit to send instruction
 	    VIA_Out_A	#0			; Clear E bit
 .endmacro
-
-
 
 ;;
 ;   Send Data to LCD display
@@ -72,7 +70,7 @@ RS	    =		%00100000
 ;;
 ;   Send Data to LCD display
 ;
-.proc	    DATA
+.proc	    Data
 	    VIA_Out_B
 	    VIA_Out_A	#LCD::RS		; Set RS, Clear RW, E bits
 	    VIA_Out_A	#(LCD::RS | LCD::E)	; Set E bit to send data
@@ -86,9 +84,7 @@ RS	    =		%00100000
 .endmacro
 
 .popseg
-
 .endif
-
 .endscope
 
 ;############################################################ {{{1 ##########

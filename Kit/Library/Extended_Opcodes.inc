@@ -34,9 +34,8 @@ Skip:
 	    ADC	    #$00
 .endmacro
 
-
 ;;
-; Arithmetic shift right accumulator
+;   Arithmetic shift right accumulator
 ;
 .macro	    ASR
 	    CMP     #$80    ; Put bit 7 into carry

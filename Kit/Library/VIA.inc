@@ -22,8 +22,14 @@
 
 .struct	    VIA
 	    .ORG	$7F00
-IORB	    .byte			; Output Register "B" Input Register "B"
-IORA	    .byte			; Output Register "A" Input Register "A"
+.union
+ORB	    .byte			; Output Register "B"
+IRB	    .byte			; Input Register "B"
+.endunion
+.union
+ORA	    .byte			; Output Register "A"
+IRA	    .byte			; Input Register "A"
+.endunion
 DDRB	    .byte			; Data Direction Register "B"
 DDRA	    .byte			; Data Direction Register "A"
 T1C_L	    .byte			; T1 Low-Order
@@ -37,7 +43,7 @@ ACR	    .byte			; Auxiliary Control Register
 PCR	    .byte			; Peripheral Control Register
 IFR	    .byte			; Interrupt Flag Register
 IER	    .byte			; Interrupt Enable Register
-RA	    .byte			; Same as Reg 1 except no "Handshake"
+IORA	    .byte			; Same as Reg 1 except no "Handshake"
 .endstruct
 
 ;;
@@ -67,7 +73,7 @@ RA	    .byte			; Same as Reg 1 except no "Handshake"
 .ifnblank   Value
 	    LDA		Value
 .endif
-	    STA		VIA::IORA
+	    STA		VIA::ORA
 .endmacro
 
 ;;
@@ -77,7 +83,7 @@ RA	    .byte			; Same as Reg 1 except no "Handshake"
 .ifnblank   Value
 	    LDA		Value
 .endif
-	    STA		VIA::IORB
+	    STA		VIA::ORB
 .endmacro
 
 ;############################################################ {{{1 ##########
