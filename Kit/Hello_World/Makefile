@@ -17,16 +17,19 @@
 
 .PHONY: all rom clean
 
-Tool_Names := Using_Macros
+Tool_Names := Using_Macros Using_Loop
 
 all:
 	$(MAKE) --directory=Using_Macros    all
+	$(MAKE) --directory=Using_Loop	    all
 
 rom:
 	$(MAKE) --directory=Using_Macro	    rom
+	$(MAKE) --directory=Using_Loop	    rom
 
 clean:
 	$(MAKE) --directory=Using_Macros    clean
+	$(MAKE) --directory=Using_Loop	    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

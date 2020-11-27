@@ -18,3 +18,4 @@ Temp
 #
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab : 
 # vim: set textwidth=0 filetype=conf foldmethod=marker nospell : 
+.~lock.*

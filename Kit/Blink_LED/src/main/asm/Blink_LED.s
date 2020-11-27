@@ -21,26 +21,26 @@
 .case	    +
 
 .segment    "VIA"
-ORB	    =	    $7F00
-DDRB	    =	    $7F02
+ORB	    =		$7F00
+DDRB	    =		$7F02
 
-.macro	    Set_B   value
-	    LDA	    value
-	    STA	    DDRB
+.macro	    Set_B	value
+	    LDA		value
+	    STA		DDRB
 .endmacro
 
-.macro	    Out_B   value
-	    LDA	    value
-	    STA	    ORB
+.macro	    Out_B	value
+	    LDA		value
+	    STA		ORB
 .endmacro
 
 .segment    "CODE"
 
-DO_RES:	    Set_B   #$FF
+DO_RES:	    Set_B	#$FF
 
-loop:	    Out_B   #$55
-	    Out_B   #$AA
-	    BRA	    loop
+loop:	    Out_B	#$55
+	    Out_B	#$AA
+	    BRA		loop
 
 DO_NMI:	    RTI
 
