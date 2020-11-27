@@ -24,26 +24,67 @@ E	    =		%10000000
 RW	    =		%01000000
 RS	    =		%00100000
 
+.if	    .defined(MACRO_ONY)
+
 ;;
 ;   Send Data to LCD display
 ;
-.macro	    Control_LCD	Instruction
-	    Out_B	{Instruction}
-	    Out_A	#0			; Clear RS, RW, E bits
-	    Out_A	#LCD::E			; Set E bit to send instruction
-	    Out_A	#0			; Clear E bit
+.macro	    LCD_Control	Instruction
+	    VIA_Out_B	{Instruction}
+	    VIA_Out_A	#0			; Clear RS, RW, E bits
+	    VIA_Out_A	#LCD::E			; Set E bit to send instruction
+	    VIA_Out_A	#0			; Clear E bit
 .endmacro
 
 ;;
 ;   Send Data to LCD display
 ;
-.macro	    Data_LCD	Data
-	    Out_B	{Data}
-	    Out_A	#LCD::RS		; Set RS, Clear RW, E bits
-	    Out_A	#(LCD::RS | LCD::E)	; Set E bit to send data
-	    Out_A	#LCD::RS		; Clear E bit
+.macro	    LCD_Data	Data
+	    VIA_Out_B	{Data}
+	    VIA_Out_A	#LCD::RS		; Set RS, Clear RW, E bits
+	    VIA_Out_A	#(LCD::RS | LCD::E)	; Set E bit to send data
+	    VIA_Out_A	#LCD::RS		; Clear E bit
 .endmacro
 
+.else
+
+.pushseg
+.segment    "CODE"
+
+;;
+;   Send Data to LCD display
+;
+.proc	    Control
+	    VIA_Out_B
+	    VIA_Out_A	#0			; Clear RS, RW, E bits
+	    VIA_Out_A	#LCD::E			; Set E bit to send instruction
+	    VIA_Out_A	#0			; Clear E bit
+	    RTS
+.endproc
+
+.macro	    LCD_Control	Instruction
+	    LDA		Instruction
+	    JSR		LCD::Control
+.endmacro
+
+;;
+;   Send Data to LCD display
+;
+.proc	    Data
+	    VIA_Out_B
+	    VIA_Out_A	#LCD::RS		; Set RS, Clear RW, E bits
+	    VIA_Out_A	#(LCD::RS | LCD::E)	; Set E bit to send data
+	    VIA_Out_A	#LCD::RS		; Clear E bit
+	    RTS
+.endproc
+
+.macro	    LCD_Data	Character
+	    LDA		Character
+	    JSR		LCD::Data
+.endmacro
+
+.popseg
+.endif
 .endscope
 
 ;############################################################ {{{1 ##########
