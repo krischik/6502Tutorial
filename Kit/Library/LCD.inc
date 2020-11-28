@@ -113,4 +113,4 @@ Busy:	    VIA_Out_A	#RW		; Start LCD read operation.
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-; vim: set textwidth=0 filetype=asm foldmethod=marker nospell :
+; vim: set textwidth=0 filetype=a65 foldmethod=marker nospell :

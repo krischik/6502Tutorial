@@ -1,18 +1,18 @@
 /*********************************************************** {{{1 ***********
-   Copyright © 2020 … 2020 Martin Krischik «krischik@users.sourceforge.net»
+* Copyright © 2020 … 2020 Martin Krischik «krischik@users.sourceforge.net»
 *****************************************************************************
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see «http://www.gnu.org/licenses/».
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see «http://www.gnu.org/licenses/».
 ************************************************************* }}}1 *********/
 
 #include <USBAPI.h>
@@ -84,7 +84,7 @@ public:
 
         return Retval;
     } // Read
-};
+}; // Bus
 
 /**
  * Address bus
@@ -132,7 +132,7 @@ extern void setup ()
 {
     Serial.begin (115200);
     Serial.println ();
-    Serial.println ("Start 6502 Monitor");
+    Serial.println ("Start 6502 Monitor (with VIA chip enable)");
 
     // Setup address bus pins
     //
@@ -154,6 +154,9 @@ extern void setup ()
     return;
 } // setup
 
+/**
+ * nothing to loop.
+ */
 extern void loop ()
 {
     // do nothing
@@ -168,20 +171,20 @@ static void On_Clock ()
 {
     auto Address = A.Read ();
     auto Data = D.Read ();
-    auto Read_Write    = digitalRead (RWB)  == HIGH ? 'r' : 'W';
-    auto Chip_Enable_1 = digitalRead (CS1)  == HIGH ? 'E' : 'd';
-    auto Chip_Enable_2 = digitalRead (CS2B) == LOW  ? 'E' : 'd';
+    auto Read_Write = digitalRead (RWB) == HIGH ? 'r' : 'W';
+    auto Chip_Enable_1 = digitalRead (CS1) == HIGH ? 'E' : 'd';
+    auto Chip_Enable_2 = digitalRead (CS2B) == LOW ? 'E' : 'd';
     char Output[15];
 
     snprintf (
-      Output,
-      sizeof Output,
-      "%04x %c %c %c %02x",
-      Address,
-      Read_Write,
-      Chip_Enable_1,
-      Chip_Enable_2,
-      Data);
+        Output,
+        sizeof Output,
+        "%04x %c %c %c %02x",
+        Address,
+        Read_Write,
+        Chip_Enable_1,
+        Chip_Enable_2,
+        Data);
     Serial.println (Output);
 
     return;
