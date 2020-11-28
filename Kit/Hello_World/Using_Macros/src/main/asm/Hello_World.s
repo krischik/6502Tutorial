@@ -34,19 +34,19 @@ Do_RES:	    VIA_Set_A	#%11100000		; Set top 3 pin as output
 	    LCD_Control	#%00000110		; Increment and shift cursor; don't shift display
 	    LCD_Control	#%00000001		; Clear Display
 
-	    LCD_Data	#'H'			; Send character 'H' to display
-	    LCD_Data	#'e'			; Send character 'e' to display
-	    LCD_Data	#'l'			; Send character 'l' to display
-	    LCD_Data	#'l'			; Send character 'l' to display
-	    LCD_Data	#'o'			; Send character 'o' to display
-	    LCD_Data	#','			; Send character ',' to display
-	    LCD_Data	#' '			; Send character ' ' to display
-	    LCD_Data	#'W'			; Send character 'W' to display
-	    LCD_Data	#'o'			; Send character 'o' to display
-	    LCD_Data	#'r'			; Send character 'r' to display
-	    LCD_Data	#'l'			; Send character 'l' to display
-	    LCD_Data	#'d'			; Send character 'd' to display
-	    LCD_Data	#'!'			; Send character '!' to display
+	    LCD_Print	#'H'			; Send character 'H' to display
+	    LCD_Print	#'e'			; Send character 'e' to display
+	    LCD_Print	#'l'			; Send character 'l' to display
+	    LCD_Print	#'l'			; Send character 'l' to display
+	    LCD_Print	#'o'			; Send character 'o' to display
+	    LCD_Print	#','			; Send character ',' to display
+	    LCD_Print	#' '			; Send character ' ' to display
+	    LCD_Print	#'W'			; Send character 'W' to display
+	    LCD_Print	#'o'			; Send character 'o' to display
+	    LCD_Print	#'r'			; Send character 'r' to display
+	    LCD_Print	#'l'			; Send character 'l' to display
+	    LCD_Print	#'d'			; Send character 'd' to display
+	    LCD_Print	#'!'			; Send character '!' to display
 
 	    STP					; Stop Processor
 

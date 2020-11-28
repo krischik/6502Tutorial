@@ -26,7 +26,14 @@
 
 .segment    "RODATA"
 
-Message:    .byte	"Hello World!"
+;;
+; The message to display. There are two lines of 16 characters
+; on the display but the buffer is 2×40 charater. Hence we need
+; to pad the output with additional spaces.
+; 
+Message:    .byte	"Hello World!    "
+	    .byte	"                        "
+	    .byte	"How do you do?  "
 Message_Len =		* - Message
 
 .segment    "CODE"
@@ -43,7 +50,7 @@ Do_RES:	    LDX		#$FF
 	    LCD_Control	#%00000001		; Clear Display
 
 	    LDX		#$00
-Loop:	    LCD_Data	{Message,X}		; Write next character to Display
+Loop:	    LCD_Print	{Message,X}		; Write next character to Display
 	    INX
 	    CPX		#(Message_Len)		; Repeat lopp until X ≥ message lenght
 	    BLT		Loop
