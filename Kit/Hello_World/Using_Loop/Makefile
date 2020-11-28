@@ -42,7 +42,9 @@ rom_list:				    \
 	da65 --cpu "65C02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
 
 target/$(Rom_Name):			    \
-    ${Object_Files}
+    ${Object_Files}			    \
+    $(Include_Dir)/${Config_File}	    \
+    target
 	ld65				    \
 	    --obj-path	$(Include_Dir)	    \
 	    --lib-path	$(Include_Dir)	    \
@@ -50,14 +52,16 @@ target/$(Rom_Name):			    \
 	    --config	${Config_File}	    \
 	    --mapfile	${Map_File}	    \
 	    -o $(@)			    \
-	    ${+}
+	    ${Object_Files}
 
 target/obj/Hello_World.o:		    \
     src/main/asm/Hello_World.s		    \
+    $(Include_Dir)/VIA.inc		    \
+    $(Include_Dir)/LCD.inc		    \
     target				    \
     target/obj
 
-target/obj/%.o: src/main/asm/%.s
+target/obj/%.o:	src/main/asm/%.s
 	ca65				    \
 	    -W1				    \
 	    --cpu "65c02"		    \

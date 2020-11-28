@@ -39,7 +39,7 @@ RS	    =		%00100000
 ;;
 ;   Send Data to LCD display
 ;
-.macro	    LCD_Data	Data
+.macro	    LCD_Print	Data
 	    VIA_Out_B	{Data}
 	    VIA_Out_A	#LCD::RS		; Set RS, Clear RW, E bits
 	    VIA_Out_A	#(LCD::RS | LCD::E)	; Set E bit to send data
@@ -52,9 +52,28 @@ RS	    =		%00100000
 .segment    "CODE"
 
 ;;
+;   Wait for instruction to finish
+;
+.proc	    Wait
+	    PHA
+	    VIA_Set_B	#%00000000	; Set Port B to all input
+
+Busy:	    VIA_Out_A	#RW		; Start LCD read operation.
+	    VIA_Out_A	#(RW | E)	; Enable Output if LCD status
+	    BIT		VIA::IRB
+	    BMI		Busy
+
+	    VIA_Out_A	#RW		; End LCD read operation
+	    VIA_Set_B	#%11111111	; Set Port B to all output
+	    PLA
+	    RTS	    	    
+.endproc
+
+;;
 ;   Send Data to LCD display
 ;
 .proc	    Control
+	    JSR		Wait
 	    VIA_Out_B
 	    VIA_Out_A	#0			; Clear RS, RW, E bits
 	    VIA_Out_A	#LCD::E			; Set E bit to send instruction
@@ -63,14 +82,17 @@ RS	    =		%00100000
 .endproc
 
 .macro	    LCD_Control	Instruction
+.ifnblank   Instruction
 	    LDA		Instruction
+.endif
 	    JSR		LCD::Control
 .endmacro
 
 ;;
 ;   Send Data to LCD display
 ;
-.proc	    Data
+.proc	    Print
+	    JSR		Wait
 	    VIA_Out_B
 	    VIA_Out_A	#LCD::RS		; Set RS, Clear RW, E bits
 	    VIA_Out_A	#(LCD::RS | LCD::E)	; Set E bit to send data
@@ -78,9 +100,11 @@ RS	    =		%00100000
 	    RTS
 .endproc
 
-.macro	    LCD_Data	Character
+.macro	    LCD_Print	Character
+.ifnblank   Character
 	    LDA		Character
-	    JSR		LCD::Data
+.endif
+	    JSR		LCD::Print
 .endmacro
 
 .popseg
@@ -89,4 +113,4 @@ RS	    =		%00100000
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-; vim: set textwidth=0 filetype=asm foldmethod=marker nospell :
+; vim: set textwidth=0 filetype=a65 foldmethod=marker nospell :
