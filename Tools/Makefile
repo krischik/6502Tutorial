@@ -15,54 +15,29 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-.PHONY: all rom burn clean pretty
+.PHONY: all rom clean pretty
 
-Tool_Name := Create_NOP
-Rom_Name  := NOP.rom
+Tool_Names := Create_NOP Create_Reset Create_LED
 
-all:					    \
-    target/$(Tool_Name)
+all:
+	$(MAKE) --directory=Create_NOP	    all
+	$(MAKE) --directory=Create_Reset    all
+	$(MAKE) --directory=Create_LED	    all
 
-rom:					    \
-    target/$(Rom_Name)
-
-burn:					    \
-    target/$(Rom_Name)
-	minipro -p "AT28C256" -w $(<)
+rom:
+	$(MAKE) --directory=Create_NOP	    rom
+	$(MAKE) --directory=Create_Reset    rom
+	$(MAKE) --directory=Create_LED	    rom
 
 pretty:
-	gnat pretty -P $(Tool_Name).gpr
+	$(MAKE) --directory=Create_NOP	    pretty
+	$(MAKE) --directory=Create_Reset    pretty
+	$(MAKE) --directory=Create_LED	    pretty
 
 clean:
-	gnat clean -P $(Tool_Name).gpr
-	-rm -r target
-	-rm src/main/ada/*.npp
-
-error1:					    \
-    target/$(Tool_Name)
-	target/$(Tool_Name) non_existing_directory/$(Rom_Name)
-
-target/$(Rom_Name):			    \
-    target/$(Tool_Name)
-	target/$(Tool_Name) $(@)
-
-target/$(Tool_Name):			    \
-    $(Tool_Name).gpr			    \
-    src/main/ada/$(Tool_Name).adb	    \
-    target				    \
-    target/obj				    \
-    target/lib
-	gnat make -Xstyle=Release -P $(<)	 || \
-	cat target/obj/$(Tool_Name).adb.stderr
-
-target:
-	mkdir $(@)
-
-target/obj:
-	mkdir $(@)
-
-target/lib:
-	mkdir $(@)
+	$(MAKE) --directory=Create_NOP	    clean
+	$(MAKE) --directory=Create_Reset    clean
+	$(MAKE) --directory=Create_LED	    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

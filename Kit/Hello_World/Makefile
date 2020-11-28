@@ -15,54 +15,21 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-.PHONY: all rom burn clean pretty
+.PHONY: all rom clean
 
-Tool_Name := Create_NOP
-Rom_Name  := NOP.rom
+Tool_Names := Using_Macros Using_Loop
 
-all:					    \
-    target/$(Tool_Name)
+all:
+	$(MAKE) --directory=Using_Macros    all
+	$(MAKE) --directory=Using_Loop	    all
 
-rom:					    \
-    target/$(Rom_Name)
-
-burn:					    \
-    target/$(Rom_Name)
-	minipro -p "AT28C256" -w $(<)
-
-pretty:
-	gnat pretty -P $(Tool_Name).gpr
+rom:
+	$(MAKE) --directory=Using_Macro	    rom
+	$(MAKE) --directory=Using_Loop	    rom
 
 clean:
-	gnat clean -P $(Tool_Name).gpr
-	-rm -r target
-	-rm src/main/ada/*.npp
-
-error1:					    \
-    target/$(Tool_Name)
-	target/$(Tool_Name) non_existing_directory/$(Rom_Name)
-
-target/$(Rom_Name):			    \
-    target/$(Tool_Name)
-	target/$(Tool_Name) $(@)
-
-target/$(Tool_Name):			    \
-    $(Tool_Name).gpr			    \
-    src/main/ada/$(Tool_Name).adb	    \
-    target				    \
-    target/obj				    \
-    target/lib
-	gnat make -Xstyle=Release -P $(<)	 || \
-	cat target/obj/$(Tool_Name).adb.stderr
-
-target:
-	mkdir $(@)
-
-target/obj:
-	mkdir $(@)
-
-target/lib:
-	mkdir $(@)
+	$(MAKE) --directory=Using_Macros    clean
+	$(MAKE) --directory=Using_Loop	    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

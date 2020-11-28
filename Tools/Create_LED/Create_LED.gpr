@@ -17,7 +17,7 @@
 --  Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ------------------------------------------------------------- 1}}} -------------
 
-project Create_NOP is
+project Create_LED is
    type Style_Type  is ("Debug"  , "Release");
    type OS_Type     is ("Linux"  , "Windows_NT","macOS");
 
@@ -30,10 +30,10 @@ project Create_NOP is
    for Library_Dir         use  "target/lib";
    for Library_Src_Dir     use  "target/lib";
    for Languages           use ("Ada");
-   for Main                use ("Create_NOP.adb");
+   for Main                use ("Create_LED.adb");
 
    Source_Files := (
-      "Create_NOP.adb");
+      "Create_LED.adb");
 
    package Compiler is
       for Default_Switches ("C")  use (
@@ -137,7 +137,7 @@ project Create_NOP is
          "-dd");
    end Pretty_Printer;
 
-end Create_NOP;
+end Create_LED;
 
 -------------------------------------------------------------------------------
 -- vim: set nowrap tabstop=8 shiftwidth=3 softtabstop=3 expandtab :

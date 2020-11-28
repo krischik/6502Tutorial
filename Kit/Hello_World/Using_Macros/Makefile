@@ -15,45 +15,56 @@
 #  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ############################################################# }}}1 ##########
 
-.PHONY: all rom burn clean pretty
+.PHONY: all rom burn clean rom_dump rom_list
 
-Tool_Name := Create_NOP
-Rom_Name  := NOP.rom
+Rom_Name	:= Hello_World.rom
+Include_Dir     := ../../Library
+Config_File	:= rom.cfg
+Object_Files	:= target/obj/Hello_World.o
+Map_File	:= target/Hello_World.map
 
-all:					    \
-    target/$(Tool_Name)
-
-rom:					    \
+all rom:				    \
     target/$(Rom_Name)
 
 burn:					    \
     target/$(Rom_Name)
 	minipro -p "AT28C256" -w $(<)
 
-pretty:
-	gnat pretty -P $(Tool_Name).gpr
-
 clean:
-	gnat clean -P $(Tool_Name).gpr
 	-rm -r target
-	-rm src/main/ada/*.npp
 
-error1:					    \
-    target/$(Tool_Name)
-	target/$(Tool_Name) non_existing_directory/$(Rom_Name)
+rom_dump:				    \
+    target/$(Rom_Name)
+	hexdump -C $(<)
+
+rom_list:				    \
+    target/$(Rom_Name)
+	da65 --cpu "65C02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
 
 target/$(Rom_Name):			    \
-    target/$(Tool_Name)
-	target/$(Tool_Name) $(@)
+    ${Object_Files}
+	ld65				    \
+	    --obj-path	$(Include_Dir)	    \
+	    --lib-path	$(Include_Dir)	    \
+	    --cfg-path	$(Include_Dir)	    \
+	    --config	${Config_File}	    \
+	    --mapfile	${Map_File}	    \
+	    -o $(@)			    \
+	    ${+}
 
-target/$(Tool_Name):			    \
-    $(Tool_Name).gpr			    \
-    src/main/ada/$(Tool_Name).adb	    \
+target/obj/Hello_World.o:		    \
+    src/main/asm/Hello_World.s		    \
     target				    \
-    target/obj				    \
-    target/lib
-	gnat make -Xstyle=Release -P $(<)	 || \
-	cat target/obj/$(Tool_Name).adb.stderr
+    target/obj
+
+target/obj/%.o: src/main/asm/%.s
+	ca65				    \
+	    -W1				    \
+	    --cpu "65c02"		    \
+	    --include-dir $(Include_Dir)    \
+	    --listing $(basename $(@)).lst  \
+	    -o $(@)			    \
+	    $(<)
 
 target:
 	mkdir $(@)
@@ -61,9 +72,7 @@ target:
 target/obj:
 	mkdir $(@)
 
-target/lib:
-	mkdir $(@)
-
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-# vim: set textwidth=0 filetype=make foldmethod=marker nospell :
+# vim: set textwidth=0 filetype=make foldmethod=marker :
+# vim: set spell spelllang=en_gb :
