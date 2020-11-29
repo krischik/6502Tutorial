@@ -54,6 +54,8 @@ target/$(Rom_Name):			    \
 
 target/obj/Hello_World.o:		    \
     src/main/asm/Hello_World.s		    \
+    $(Include_Dir)/VIA.inc		    \
+    $(Include_Dir)/LCD.inc		    \
     target				    \
     target/obj
 

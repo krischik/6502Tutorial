@@ -27,9 +27,29 @@ RS	    =		%00100000
 .if	    .defined(MACRO_ONY)
 
 ;;
+;   Wait for instruction to finish
+;
+.macro	    LCD_Wait
+.local	    Busy
+
+	    PHA
+	    VIA_Set_B	#%00000000		; Set Port B to all input
+
+Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
+	    VIA_Out_A	#(LCD::RW | LCD::E)	; Enable Output if LCD status
+	    BIT		VIA::IRB
+	    BMI		Busy
+
+	    VIA_Out_A	#LCD::RW		; End LCD read operation
+	    VIA_Set_B	#%11111111		; Set Port B to all output
+	    PLA
+.endmacro
+
+;;
 ;   Send Data to LCD display
 ;
 .macro	    LCD_Control	Instruction
+	    LCD_Wait
 	    VIA_Out_B	{Instruction}
 	    VIA_Out_A	#0			; Clear RS, RW, E bits
 	    VIA_Out_A	#LCD::E			; Set E bit to send instruction
@@ -40,6 +60,7 @@ RS	    =		%00100000
 ;   Send Data to LCD display
 ;
 .macro	    LCD_Print	Data
+	    LCD_Wait
 	    VIA_Out_B	{Data}
 	    VIA_Out_A	#LCD::RS		; Set RS, Clear RW, E bits
 	    VIA_Out_A	#(LCD::RS | LCD::E)	; Set E bit to send data
@@ -56,24 +77,28 @@ RS	    =		%00100000
 ;
 .proc	    Wait
 	    PHA
-	    VIA_Set_B	#%00000000	; Set Port B to all input
+	    VIA_Set_B	#%00000000		; Set Port B to all input
 
-Busy:	    VIA_Out_A	#RW		; Start LCD read operation.
-	    VIA_Out_A	#(RW | E)	; Enable Output if LCD status
+Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
+	    VIA_Out_A	#(LCD::RW | LCD::E)	; Enable Output if LCD status
 	    BIT		VIA::IRB
 	    BMI		Busy
 
-	    VIA_Out_A	#RW		; End LCD read operation
-	    VIA_Set_B	#%11111111	; Set Port B to all output
+	    VIA_Out_A	#LCD::RW		; End LCD read operation
+	    VIA_Set_B	#%11111111		; Set Port B to all output
 	    PLA
-	    RTS	    	    
+	    RTS
 .endproc
+
+.macro	    LCD_Wait
+	    JSR		LCD::Wait
+.endmacro
 
 ;;
 ;   Send Data to LCD display
 ;
 .proc	    Control
-	    JSR		Wait
+	    JSR		LCD::Wait
 	    VIA_Out_B
 	    VIA_Out_A	#0			; Clear RS, RW, E bits
 	    VIA_Out_A	#LCD::E			; Set E bit to send instruction
