@@ -54,6 +54,8 @@ target/$(Rom_Name):			    \
 
 target/obj/Blink_LED.o:			    \
     src/main/asm/Blink_LED.s		    \
+    $(Include_Dir)/VIA.inc		    \
+    $(Include_Dir)/LCD.inc		    \
     target				    \
     target/obj
 
