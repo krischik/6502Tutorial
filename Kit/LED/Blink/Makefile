@@ -17,11 +17,11 @@
 
 .PHONY: all rom burn clean rom_dump rom_list
 
-Rom_Name	:= Rotate_LED.rom
-Include_Dir     := ../Library
+Rom_Name	:= Blink_LED.rom
+Include_Dir     := ../../Library
 Config_File	:= rom.cfg
-Object_Files	:= target/obj/Rotate_LED.o
-Map_File	:= target/Rotate_LED.map
+Object_Files	:= target/obj/Blink_LED.o
+Map_File	:= target/Blink_LED.map
 
 all rom:				    \
     target/$(Rom_Name)
@@ -39,7 +39,7 @@ rom_dump:				    \
 
 rom_list:				    \
     target/$(Rom_Name)
-	da65 --cpu "65C02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
+	da65 --cpu "65c02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
 
 target/$(Rom_Name):			    \
     ${Object_Files}
@@ -52,8 +52,8 @@ target/$(Rom_Name):			    \
 	    -o $(@)			    \
 	    ${+}
 
-target/obj/Rotate_LED.o:		    \
-    src/main/asm/Rotate_LED.s		    \
+target/obj/Blink_LED.o:			    \
+    src/main/asm/Blink_LED.s		    \
     $(Include_Dir)/VIA.inc		    \
     $(Include_Dir)/LCD.inc		    \
     target				    \
