@@ -30,9 +30,9 @@
 ; The message to display. There are two lines of 16 characters
 ; on the display but the buffer is 2×40 charater. Hence we need
 ; to pad the output with additional spaces.
-; 
+;
 Message:    .byte	"Hello World!    "
-	    .byte	"                        "
+	    .res	24,' '
 	    .byte	"How do you do?  "
 Message_Len =		* - Message
 

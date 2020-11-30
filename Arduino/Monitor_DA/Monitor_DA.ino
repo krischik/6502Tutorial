@@ -389,6 +389,11 @@ static byte const RDY = 4;
 static byte const SYNC = 5;
 
 /**
+ * Output line.
+ */
+static int Line = 0;
+
+/**
  * Setup Arduino
  */
 extern void setup ()
@@ -447,7 +452,8 @@ static void On_Clock ()
         snprintf (
             Output,
             sizeof Output,
-            "%04x %c %c %c %02x CPU Stopped",
+            "| %08d: %04x %c %c %c %02x CPU Stopped",
+            Line,
             Address,
             Read_Write_Char,
             Ready_Char,
@@ -461,7 +467,8 @@ static void On_Clock ()
         snprintf (
             Output,
             sizeof Output,
-            "%04x %c %c %c %02x %s",
+            "| %08d: %04x %c %c %c %02x %s",
+            Line,
             Address,
             Read_Write_Char,
             Ready_Char,
@@ -476,7 +483,8 @@ static void On_Clock ()
         snprintf (
             Output,
             sizeof Output,
-            "%04x %c %c %c %02x '%c'",
+            "| %08d: %04x %c %c %c %02x '%c'",
+            Line,
             Address,
             Read_Write_Char,
             Ready_Char,
@@ -489,7 +497,8 @@ static void On_Clock ()
         snprintf (
             Output,
             sizeof Output,
-            "%04x %c %c %c %02x",
+            "| %08d: %04x %c %c %c %02x",
+            Line,
             Address,
             Read_Write_Char,
             Ready_Char,
@@ -498,6 +507,8 @@ static void On_Clock ()
     } // if
 
     Serial.println (Output);
+
+    Line = Line + 1;
 
     return;
 } // On_Clock

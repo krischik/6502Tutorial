@@ -70,6 +70,21 @@ Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
 .else
 
 .pushseg
+
+.segment    "ZEROPAGE"
+
+Value:	    .word	0	    ; Dividend
+Mod:	    .word	0	    ; Remainder
+Subtract:   .byte	0	    ; Subtract
+
+.segment    "DATA"
+
+;;
+; Text buffer for numeric output
+;
+Message:    .res	5
+Message_Len =		* - Message
+
 .segment    "CODE"
 
 ;;
@@ -130,6 +145,74 @@ Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
 	    LDA		Character
 .endif
 	    JSR		LCD::Print
+.endmacro
+
+.proc	    Print_Decimal
+	    PHX
+	    PHY
+	    LDY		#(LCD::Message_Len)
+
+	    ; Initialize Remainder
+Divide:	    DEY
+	    STZ		LCD::Mod
+	    STZ		LCD::Mod + 1
+	    LDX		#16
+	    CLC
+
+	    ; Rotated Divident and Remainder
+Digit:	    ROL		LCD::Value
+	    ROL		LCD::Value + 1
+	    ROL		LCD::Mod
+	    ROL		LCD::Mod + 1
+
+	    ; 16 bit Subtraction
+	    SEC
+	    LDA		LCD::Mod
+	    SBC		#10
+	    STA		LCD::Subtract
+	    LDA		LCD::Mod + 1
+	    SBC		#0
+	    BCC		Ignore
+
+	    STA		LCD::Mod + 1
+	    LDA		LCD::Subtract
+	    STA		LCD::Mod
+
+Ignore:	    DEX
+	    BNE		Digit
+
+	    ROL		LCD::Value
+	    ROL		LCD::Value + 1
+	    LDA		LCD::Mod
+	    CLC
+	    ADC		#'0'
+	    STA		LCD::Message,Y
+
+	    LDA		LCD::Value
+	    ORA		LCD::Value + 1
+
+	    BNE		Divide
+
+Loop:	    LCD_Print	{LCD::Message,Y}	; Write next character to Display
+	    INY
+	    CPY		#(LCD::Message_Len)	; Repeat lopp until X ≥ message lenght
+	    BLT		Loop
+
+	    PLY
+	    PLX
+	    RTS
+.endproc
+
+.macro	    LCD_Decimal	Number
+	    PHA
+	    LDA		Number			; Initialize parameter
+	    STA		LCD::Value
+	    LDA		Number + 1
+	    STA		LCD::Value + 1
+	    
+	    JSR		LCD::Print_Decimal
+
+	    PLA
 .endmacro
 
 .popseg
