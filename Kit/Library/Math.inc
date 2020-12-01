@@ -21,4 +21,5 @@
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-; vim: set textwidth=0 filetype=a65 foldmethod=marker nospell :
+; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker :
+; vim: set spell spelllang=en_gb :

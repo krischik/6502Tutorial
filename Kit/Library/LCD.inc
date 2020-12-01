@@ -73,17 +73,20 @@ Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
 
 .segment    "ZEROPAGE"
 
+;;
+;   Storrage to perform the division needed for decimal output
+;
 Value:	    .word	0	    ; Dividend
-Mod:	    .word	0	    ; Remainder
+Mod10:	    .word	0	    ; Remainder
 Subtract:   .byte	0	    ; Subtract
 
 .segment    "DATA"
 
 ;;
-; Text buffer for numeric output
+;   Text buffer for numeric output
 ;
-Message:    .res	5
-Message_Len =		* - Message
+Text:	    .res	5
+Text_Len    =		* - Text
 
 .segment    "CODE"
 
@@ -148,54 +151,51 @@ Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
 .endmacro
 
 .proc	    Print_Decimal
-	    PHX
+	    PHX					; Save X and Y register to stack
 	    PHY
-	    LDY		#(LCD::Message_Len)
+	    LDY		#(LCD::Text_Len)	; We start at the end of the text buffer
 
-	    ; Initialize Remainder
-Divide:	    DEY
-	    STZ		LCD::Mod
-	    STZ		LCD::Mod + 1
+Divide:	    DEY					; And store the characters descending
+	    STZ		LCD::Mod10		; Initialize Remainder with zero
+	    STZ		LCD::Mod10 + 1
 	    LDX		#16
 	    CLC
 
-	    ; Rotated Divident and Remainder
-Digit:	    ROL		LCD::Value
+Digit:	    ROL		LCD::Value		; Rotated dividend and remainder
 	    ROL		LCD::Value + 1
-	    ROL		LCD::Mod
-	    ROL		LCD::Mod + 1
+	    ROL		LCD::Mod10
+	    ROL		LCD::Mod10 + 1
 
-	    ; 16 bit Subtraction
-	    SEC
-	    LDA		LCD::Mod
-	    SBC		#10
-	    STA		LCD::Subtract
-	    LDA		LCD::Mod + 1
+
+	    LDA		LCD::Mod10		; Subtract 10 from Remainder
+	    SUB		#10
+	    STA		LCD::Subtract		; Temporary store low byte of subtraction
+	    LDA		LCD::Mod10 + 1
 	    SBC		#0
-	    BCC		Ignore
+	    BCC		Ignore			; Skip if Remainder was smaller then 10
 
-	    STA		LCD::Mod + 1
-	    LDA		LCD::Subtract
-	    STA		LCD::Mod
+	    STA		LCD::Mod10 + 1		; Store subtracted value in remainder
+	    LDA		LCD::Subtract		; restore low byte of subtraction
+	    STA		LCD::Mod10
 
-Ignore:	    DEX
+Ignore:	    DEX					; Continue for 16 rotations.
 	    BNE		Digit
 
-	    ROL		LCD::Value
+	    ROL		LCD::Value		; one last rotation for dividend
 	    ROL		LCD::Value + 1
-	    LDA		LCD::Mod
-	    CLC
-	    ADC		#'0'
-	    STA		LCD::Message,Y
+	    LDA		LCD::Mod10		; our next character is in remainder
+	    ADD		#'0'
+	    STA		LCD::Text,Y
 
-	    LDA		LCD::Value
+	    LDA		LCD::Value		; stop when dividend is zero
 	    ORA		LCD::Value + 1
-
 	    BNE		Divide
 
-Loop:	    LCD_Print	{LCD::Message,Y}	; Write next character to Display
+; Print output. Note that Y now points to the first character. 
+
+Loop:	    LCD_Print	{LCD::Text,Y}	; Write next character to Display
 	    INY
-	    CPY		#(LCD::Message_Len)	; Repeat lopp until X ≥ message lenght
+	    CPY		#(LCD::Text_Len)	; Repeat loop until Y ≥ message length
 	    BLT		Loop
 
 	    PLY
@@ -209,7 +209,7 @@ Loop:	    LCD_Print	{LCD::Message,Y}	; Write next character to Display
 	    STA		LCD::Value
 	    LDA		Number + 1
 	    STA		LCD::Value + 1
-	    
+
 	    JSR		LCD::Print_Decimal
 
 	    PLA
@@ -221,4 +221,5 @@ Loop:	    LCD_Print	{LCD::Message,Y}	; Write next character to Display
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-; vim: set textwidth=0 filetype=a65 foldmethod=marker nospell :
+; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker spell :
+; vim: set spell spelllang=en_gb :

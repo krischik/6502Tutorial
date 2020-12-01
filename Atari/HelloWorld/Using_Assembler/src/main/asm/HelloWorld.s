@@ -77,8 +77,8 @@ MSG:
 
 		RTS		; fix for SpartaDOS / OS/A+
 				; They first call the entry point from AUTOSTRT; and
-                		; then, the load address (this rts here).
-                		; We point AUTOSTRT directly after the rts.
+				; then, the load address (this rts here).
+				; We point AUTOSTRT directly after the rts.
 syschk:		RTS
 
 __SYSTEM_CHECK__=syschk
@@ -90,8 +90,8 @@ __SYSTEM_CHECK__=syschk
 
 .segment "AUTOSTRT"
 .word		RUNAD                   ; defined in atari.inc
-.word   	RUNAD+1
-.word   	start
+.word		RUNAD+1
+.word		start
 
 
 .segment        "EXEHDR"
@@ -101,5 +101,7 @@ __SYSTEM_CHECK__=syschk
 .word		__MAIN_START__
 .word		__BSS_LOAD__ - 1
 
+;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab :
-; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker nospell :
+; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker :
+; vim: set spell spelllang=en_gb :
