@@ -21,36 +21,67 @@
 .case	    +
 
 .segment    "VIA"
-ORB	    =		$7F00
-DDRB	    =		$7F02
+ORB	    =	    $7F00
+DDRB	    =	    $7F02
 
-.macro	    Set_B	value
-	    LDA		value
-	    STA		DDRB
+;;
+;   Set VIA data directon register B
+;
+.macro	    Set_B   Value
+.ifnblank	    Value
+	    LDA	    Value
+.endif
+	    STA	    DDRB
 .endmacro
 
-.macro	    Out_B	value
-	    LDA		value
-	    STA		ORB
+;;
+;   Set VIA output register B
+;
+.macro	    Out_B   Value
+.ifnblank	    Value
+	    LDA	    Value
+.endif
+	    STA	    ORB
+.endmacro
+
+;;
+;   Logical rotate right accumulator
+;
+.macro	    L_ROR
+.local	    Skip
+	    LSR
+	    BCC	    Skip
+	    ORA	    #$80
+Skip:
+.endmacro
+
+;;
+;   Logical rotate left accumulator
+;
+.macro	    L_ROL
+	    ASL
+	    ADC	    #0
 .endmacro
 
 .segment    "CODE"
 
-DO_RES:	    Set_B	#$FF
+Do_RES:	    Set_B   #$FF
+	    Out_B   #$50
 
-loop:	    Out_B	#$55
-	    Out_B	#$AA
-	    BRA		loop
+Loop:	    L_ROR
+	    Out_B
+	    BRA	    Loop
 
-DO_NMI:	    RTI
+Do_NMI:	    RTI
 
-DO_IRQ:	    RTI
+Do_IRQ:	    RTI
 
 .segment    "HEADER"
-.word	    DO_NMI
-.word	    DO_RES
-.word	    DO_IRQ
+.word	    Do_NMI
+.word	    Do_RES
+.word	    Do_IRQ
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-; vim: set textwidth=0 filetype=a65 foldmethod=marker nospell :
+; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker :
+; vim: set spell spelllang=en_gb :
