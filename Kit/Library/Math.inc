@@ -15,35 +15,11 @@
 ;  along with this program.  If not, see «http://www.gnu.org/licenses/».
 ;############################################################ }}}1 ##########
 
-;;
-;   Logical (without carry) rotate right
-;
-.macro	    LRR	    Value
-.local	    Skip
-	    LSR	    Value
-	    BCC	    Skip
-	    ORA	    #$80
-Skip:
-.endmacro
+.scope		Math
 
-;;
-;   Logical (without carry) rotate left
-;
-.macro	    LRL	    Value
-	    ASL	    Value
-	    ADC	    #$00	; Set low bit to carry
-.endmacro
-
-;;
-;   Arithmetic shift right accumulator
-;
-.macro	    ASR	    Value
-	    CMP     #$80	; Put bit 7 into carry
-	    ROR	    Value	; Rotate right with carry
-.endmacro
-
+.endscope
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker spell :
+; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker :
 ; vim: set spell spelllang=en_gb :

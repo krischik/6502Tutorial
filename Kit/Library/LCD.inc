@@ -70,6 +70,24 @@ Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
 .else
 
 .pushseg
+
+.segment    "ZEROPAGE"
+
+;;
+;   Storage to perform the division needed for decimal output
+;
+Value:	    .res	2	    ; Dividend
+Mod10:	    .res	2	    ; Remainder
+Subtract:   .res	1	    ; Subtract
+
+.segment    "DATA"
+
+;;
+;   Text buffer for numeric output
+;
+Text:	    .res	5
+Text_Len    =		* - Text
+
 .segment    "CODE"
 
 ;;
@@ -132,10 +150,75 @@ Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
 	    JSR		LCD::Print
 .endmacro
 
+.proc	    Print_Decimal
+	    PHX					; Save X and Y register to stack
+	    PHY
+	    LDY		#(LCD::Text_Len)	; We start at the end of the text buffer
+
+Divide:	    DEY					; And store the characters descending
+	    STZ		LCD::Mod10		; Initialize remainder with zero
+	    STZ		LCD::Mod10 + 1
+	    LDX		#16
+	    CLC
+
+Digit:	    ROL		LCD::Value		; Rotated dividend and remainder
+	    ROL		LCD::Value + 1
+	    ROL		LCD::Mod10
+	    ROL		LCD::Mod10 + 1
+
+	    LDA		LCD::Mod10		; Subtract 10 from Remainder
+	    SUB		#10
+	    STA		LCD::Subtract		; Temporary store low byte of subtraction
+	    LDA		LCD::Mod10 + 1
+	    SBC		#0
+	    BCC		Ignore			; Skip if remainder was smaller then 10
+
+	    STA		LCD::Mod10 + 1		; Store subtracted value in remainder
+	    LDA		LCD::Subtract		; restore low byte of subtraction
+	    STA		LCD::Mod10
+
+Ignore:	    DEX					; Continue for 16 rotations.
+	    BNE		Digit
+
+	    ROL		LCD::Value		; one last rotation for dividend only
+	    ROL		LCD::Value + 1
+	    LDA		LCD::Mod10		; our next character is in remainder
+	    ADD		#'0'
+	    STA		LCD::Text,Y
+
+	    LDA		LCD::Value		; stop when dividend is zero
+	    ORA		LCD::Value + 1
+	    BNE		Divide
+
+; Print output. Note that Y points to the first character. 
+
+Loop:	    LCD_Print	{LCD::Text,Y}	; Write next character to Display
+	    INY
+	    CPY		#(LCD::Text_Len)	; Repeat loop until Y ≥ message length
+	    BLT		Loop
+
+	    PLY
+	    PLX
+	    RTS
+.endproc
+
+.macro	    LCD_Decimal	Number
+	    PHA
+	    LDA		Number			; Initialize parameter
+	    STA		LCD::Value
+	    LDA		Number + 1
+	    STA		LCD::Value + 1
+
+	    JSR		LCD::Print_Decimal
+
+	    PLA
+.endmacro
+
 .popseg
 .endif
 .endscope
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-; vim: set textwidth=0 filetype=a65 foldmethod=marker nospell :
+; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker spell :
+; vim: set spell spelllang=en_gb :

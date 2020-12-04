@@ -17,19 +17,19 @@
 
 .PHONY: all rom clean
 
-Tool_Names := Hello_World LED
+Tool_Names := Blink Rotate
 
 all:
-	$(MAKE) --directory=LED		    all
-	$(MAKE) --directory=Hello_World	    all
+	$(MAKE) --directory=Blink	    all
+	$(MAKE) --directory=Rotate	    all
 
 rom:
-	$(MAKE) --directory=LED		    rom
-	$(MAKE) --directory=Hello_World	    rom
+	$(MAKE) --directory=Blink	    rom
+	$(MAKE) --directory=Rotate	    rom
 
 clean:
-	$(MAKE) --directory=LED		    clean
-	$(MAKE) --directory=Hello_World	    clean
+	$(MAKE) --directory=Blink	    clean
+	$(MAKE) --directory=Rotate	    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

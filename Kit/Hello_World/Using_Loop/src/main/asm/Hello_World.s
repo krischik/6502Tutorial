@@ -30,9 +30,9 @@
 ; The message to display. There are two lines of 16 characters
 ; on the display but the buffer is 2×40 charater. Hence we need
 ; to pad the output with additional spaces.
-; 
+;
 Message:    .byte	"Hello World!    "
-	    .byte	"                        "
+	    .res	24,' '
 	    .byte	"How do you do?  "
 Message_Len =		* - Message
 
@@ -47,7 +47,7 @@ Do_RES:	    LDX		#$FF
 	    LCD_Control	#%00111000		; Set 8-bit mode; 2 line display; 5×8 font
 	    LCD_Control	#%00001110		; Display in; cursor on; blink off
 	    LCD_Control	#%00000110		; Increment and shift cursor; don't shift display
-	    LCD_Control	#%00000001		; Clear Display
+	    LCD_Control	#%00000001		; Clear Display sdjhfsdjk
 
 	    LDX		#$00
 Loop:	    LCD_Print	{Message,X}		; Write next character to Display
@@ -68,5 +68,5 @@ Do_IRQ:	    RTI
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
-; vim: set textwidth=0 filetype=a65 foldmethod=marker nospell :
+; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker spell :
 ; vim: set spell spelllang=en_gb :
