@@ -16,31 +16,32 @@
 ;############################################################ }}}1 ##########
 
 ;;
-;   Logical rotate right accumulator
+;   Logical (without carry) rotate right
 ;
-.macro	    LRR
+.macro	    LRR	    Value
 .local	    Skip
-	    LSR
+	    LSR	    Value
 	    BCC	    Skip
 	    ORA	    #$80
 Skip:
 .endmacro
 
 ;;
-;   Logical rotate left accumulator
+;   Logical (without carry) rotate left
 ;
-.macro	    LRL
-	    ASL
-	    ADC	    #$00
+.macro	    LRL	    Value
+	    ASL	    Value
+	    ADC	    #$00	; Set low bit to carry
 .endmacro
 
 ;;
 ;   Arithmetic shift right accumulator
 ;
-.macro	    ASR
-	    CMP     #$80    ; Put bit 7 into carry
-	    ROR             ; Rotate right with carry
+.macro	    ASR	    Value
+	    CMP     #$80	; Put bit 7 into carry
+	    ROR	    Value	; Rotate right with carry
 .endmacro
+
 
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

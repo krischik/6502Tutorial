@@ -74,11 +74,11 @@ Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
 .segment    "ZEROPAGE"
 
 ;;
-;   Storrage to perform the division needed for decimal output
+;   Storage to perform the division needed for decimal output
 ;
-Value:	    .word	0	    ; Dividend
-Mod10:	    .word	0	    ; Remainder
-Subtract:   .byte	0	    ; Subtract
+Value:	    .res	2	    ; Dividend
+Mod10:	    .res	2	    ; Remainder
+Subtract:   .res	1	    ; Subtract
 
 .segment    "DATA"
 
@@ -156,7 +156,7 @@ Busy:	    VIA_Out_A	#LCD::RW		; Start LCD read operation.
 	    LDY		#(LCD::Text_Len)	; We start at the end of the text buffer
 
 Divide:	    DEY					; And store the characters descending
-	    STZ		LCD::Mod10		; Initialize Remainder with zero
+	    STZ		LCD::Mod10		; Initialize remainder with zero
 	    STZ		LCD::Mod10 + 1
 	    LDX		#16
 	    CLC
@@ -166,13 +166,12 @@ Digit:	    ROL		LCD::Value		; Rotated dividend and remainder
 	    ROL		LCD::Mod10
 	    ROL		LCD::Mod10 + 1
 
-
 	    LDA		LCD::Mod10		; Subtract 10 from Remainder
 	    SUB		#10
 	    STA		LCD::Subtract		; Temporary store low byte of subtraction
 	    LDA		LCD::Mod10 + 1
 	    SBC		#0
-	    BCC		Ignore			; Skip if Remainder was smaller then 10
+	    BCC		Ignore			; Skip if remainder was smaller then 10
 
 	    STA		LCD::Mod10 + 1		; Store subtracted value in remainder
 	    LDA		LCD::Subtract		; restore low byte of subtraction
@@ -181,7 +180,7 @@ Digit:	    ROL		LCD::Value		; Rotated dividend and remainder
 Ignore:	    DEX					; Continue for 16 rotations.
 	    BNE		Digit
 
-	    ROL		LCD::Value		; one last rotation for dividend
+	    ROL		LCD::Value		; one last rotation for dividend only
 	    ROL		LCD::Value + 1
 	    LDA		LCD::Mod10		; our next character is in remainder
 	    ADD		#'0'
@@ -191,7 +190,7 @@ Ignore:	    DEX					; Continue for 16 rotations.
 	    ORA		LCD::Value + 1
 	    BNE		Divide
 
-; Print output. Note that Y now points to the first character. 
+; Print output. Note that Y points to the first character. 
 
 Loop:	    LCD_Print	{LCD::Text,Y}	; Write next character to Display
 	    INY

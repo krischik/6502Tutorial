@@ -37,7 +37,7 @@ Do_RES:	    LDX		#$FF
 	    VIA_Set_B	#%11111111		; Set all pins as output
 
 	    LCD_Control	#%00111000		; Set 8-bit mode; 2 line display; 5×8 font
-	    LCD_Control	#%00001110		; Display in; cursor on; blink off
+	    LCD_Control	#%00001110		; Display on; cursor on; blink off
 	    LCD_Control	#%00000110		; Increment and shift cursor; don't shift display
 	    LCD_Control	#%00000001		; Clear Display
 
