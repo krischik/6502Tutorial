@@ -17,11 +17,11 @@
 
 .PHONY: all rom burn clean rom_dump rom_list
 
-Rom_Name	:= Division.rom
-Include_Dir     := ../Library
+Rom_Name	:= Counter.rom
+Include_Dir     := ../../Library
 Config_File	:= rom.cfg
-Object_Files	:= target/obj/Division.o
-Map_File	:= target/Division.map
+Object_Files	:= target/obj/Counter.o
+Map_File	:= target/Counter.map
 
 all rom:				    \
     target/$(Rom_Name)
@@ -54,8 +54,8 @@ target/$(Rom_Name):			    \
 	    -o $(@)			    \
 	    ${Object_Files}
 
-target/obj/Division.o:			    \
-    src/main/asm/Division.s		    \
+target/obj/Counter.o:			    \
+    src/main/asm/Counter.s		    \
     $(Include_Dir)/VIA.inc		    \
     $(Include_Dir)/LCD.inc		    \
     target				    \
