@@ -62,7 +62,6 @@ Loop:	    LCD_Control	#%00000010		; Move cursor home
 	    BNE		Exit
 	    INC		Counter + 1	    
 Exit:	    RTI
-
 .endproc
 
 ;; 

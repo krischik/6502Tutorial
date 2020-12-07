@@ -31,6 +31,9 @@ A tutorial on cross compiling for the 6502 CPU on Atari and the Ben Eater 6502 K
     * Crystal oscillator
         - [Day 18 – Add disassembler to monitor](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-18)
         - [Day 19 – Add crystal oscillator](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-19)
+    * Interrupts
+        - [Day 20 – Print decimal number](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-20)
+        - [Day 21 – NMI Interrupt](https://gitlab.com/krischik/6502Tutorial/-/wikis/Ben-Eater-6502-Kit/Day-21)
 
 <!-- vim: set wrap tabstop=8 shiftwidth=4 softtabstop=4 expandtab : -->
 <!-- vim: set textwidth=0 filetype=markdown foldmethod=marker spell : -->
