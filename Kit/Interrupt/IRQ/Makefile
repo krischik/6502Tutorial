@@ -17,7 +17,7 @@
 
 .PHONY: all rom burn clean rom_dump rom_list
 
-Rom_Name	:= NMI.rom
+Rom_Name	:= IRQ.rom
 Include_Dir     := ../../Library
 Config_File	:= rom.cfg
 Object_Files	:= target/obj/Counter.o
