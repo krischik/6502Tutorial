@@ -17,22 +17,19 @@
 
 .PHONY: all rom clean
 
-Tool_Names := Hello_World LED  Interrupt
+Tool_Names := Division NMI 
 
 all:
-	$(MAKE) --directory=Hello_World	    all
-	$(MAKE) --directory=Interrupt	    all
-	$(MAKE) --directory=LED		    all
+	$(MAKE) --directory=Division	    all
+	$(MAKE) --directory=NMI		    all
 
 rom:
-	$(MAKE) --directory=Hello_World	    rom
-	$(MAKE) --directory=Interrupt	    rom
-	$(MAKE) --directory=LED		    rom
+	$(MAKE) --directory=Division	    rom
+	$(MAKE) --directory=NMI		    rom
 
 clean:
-	$(MAKE) --directory=Hello_World	    clean
-	$(MAKE) --directory=Interrupt	    clean
-	$(MAKE) --directory=LED		    clean
+	$(MAKE) --directory=Division	    clean
+	$(MAKE) --directory=NMI		    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
