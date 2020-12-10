@@ -60,7 +60,7 @@ Loop:	    LCD_Control	#%00000010		; Move cursor home
 ;   Increment Counter
 ;
 .proc	    Inc_Counter
-	    INC		Counter
+	    INC		Counter			; 16 bit increment
 	    BNE		Exit
 	    INC		Counter + 1
 Exit:	    RTS
@@ -70,21 +70,22 @@ Exit:	    RTS
 ;   NMI (non-maskable interrupt) handler
 ;
 .proc	    Do_NMI
-	    JSR		Inc_Counter
+	    JSR		Inc_Counter		; just increment the counter
 	    RTI
 .endproc
 
 ;;
 ;   Handle interrupts from VIA
+;
 .proc	    Do_VIA_IRQ
 	    PHA
 	    LDA		#%00000010		; Check CA1 interrupt.
 	    BIT		VIA::IFR
-	    BZE		Exit
-	    JSR		Inc_Counter
+	    BZE		Next			; Interrupt wasn't CA1, check next
+	    JSR		Inc_Counter		; increment the counter
+	    BIT		VIA::ORA		; Clear CA1 interrupt
 
-Exit:	    BIT		VIA::ORA
-	    PLA
+Next:	    PLA					; No more interrupt sources to check.
 	    RTS
 .endproc
 
@@ -95,7 +96,7 @@ Exit:	    BIT		VIA::ORA
 	    BIT		VIA::IFR
 	    BPL		Next			; Interrupt wasn't from VIA, check next
 	    JSR		Do_VIA_IRQ
-Next:	    RTI					; No more interrupt sources.
+Next:	    RTI					; No more interrupt sources to check.
 .endproc
 
 .segment    "HEADER"
