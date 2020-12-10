@@ -86,6 +86,26 @@ IORA	    .byte			; Same as Reg 1 except no "Handshake"
 	    STA		VIA::ORB
 .endmacro
 
+;;
+;   Set VIA peripheral control 
+;
+.macro	    VIA_P_Ctrl	Value
+.ifnblank   Value
+	    LDA		Value
+.endif
+	    STA		VIA::PCR
+.endmacro
+
+;;
+;   Set VIA interrupt enable
+;
+.macro	    VIA_Int_E	Value
+.ifnblank   Value
+	    LDA		Value
+.endif
+	    STA		VIA::IER
+.endmacro
+
 ;############################################################ {{{1 ##########
 ; vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :
 ; vim: set textwidth=0 filetype=asm_ca65 foldmethod=marker :
