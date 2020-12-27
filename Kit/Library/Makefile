@@ -18,27 +18,28 @@
 .PHONY: all rom burn clean rom_dump rom_list
 
 Include_Dir     := ../Library
+Source_Dir	:= src/main/asm
 Config_File	:= rom.cfg
 Object_Files	:= target/obj/LCD.o
 Map_File	:= target/Division.map
 
-all:					    \
+all:							\
     ${Object_Files} 
 
 clean:
 	-rm -r target
 
-target/obj/LCD.o:			    \
-    src/main/asm/LCD.s			    \
-    target				    \
+target/obj/LCD.o:					\
+    ${Source_Dir}/LCD.s			    		\
+    target				    		\
     target/obj
 
-target/obj/%.o:	src/main/asm/%.s
+target/obj/%.o:	${Source_Dir}/%.s
 	ca65						\
 	    -W1				    		\
 	    --cpu "65c02"		    		\
-	    --include-dir $(Include_Dir)/src/main/asm   \
-	    --listing $(basename $(@)).lst		\
+	    --include-dir $(Include_Dir)		\
+	    --listing	$(basename $(@)).lst		\
 	    -o $(@)					\
 	    $(<)
 

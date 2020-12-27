@@ -87,6 +87,48 @@ IORA	    .byte			; Same as Reg 1 except no "Handshake"
 .endmacro
 
 ;;
+;   Set VIA Timer 1 Latches
+;
+.macro	    VIA_Set_T1	Value
+.if	    (.match (.left (1, {Value}), #))
+	    ; Load Timer with immediate value
+
+	    LDA		#(.lobyte (.right (.tcount ({Value})-1, {Value})))
+	    STA		VIA::T1L_L
+	    LDA		#(.hibyte (.right (.tcount ({Value})-1, {Value})))
+	    STA		VIA::T1L_H
+.else
+	    ; Load time with value from address and address + 1
+
+            LDA		Value
+	    STA		VIA::T1L_L
+            LDA		1 + (Value)
+	    STA		VIA::T1L_H
+.endif
+.endmacro
+
+;;
+;   Set VIA Timer 2 Counter
+;
+.macro	    VIA_Set_T2	Value
+.if	    (.match (.left (1, {Value}), #))
+	    ; Load Timer with immediate value
+
+	    LDA		#(.lobyte (.right (.tcount ({Value})-1, {Value})))
+	    STA		VIA::T2C_L
+	    LDA		#(.hibyte (.right (.tcount ({Value})-1, {Value})))
+	    STA		VIA::T2C_H
+.else
+	    ; Interpret values as address and address + 1
+
+            LDA		Value
+	    STA		VIA::T2C_L
+            LDA		1 + (Value)
+	    STA		VIA::T2C_H
+.endif
+.endmacro
+
+;;
 ;   Set VIA peripheral control 
 ;
 .macro	    VIA_P_Ctrl	Value
@@ -100,6 +142,16 @@ IORA	    .byte			; Same as Reg 1 except no "Handshake"
 ;   Set VIA interrupt enable
 ;
 .macro	    VIA_Int_E	Value
+.ifnblank   Value
+	    LDA		Value
+.endif
+	    STA		VIA::IER
+.endmacro
+
+;;
+;   Set VIA Auxiliary Control Register
+;
+.macro	    VIA_Set_ACR	Value
 .ifnblank   Value
 	    LDA		Value
 .endif

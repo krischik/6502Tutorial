@@ -17,19 +17,25 @@
 
 .PHONY: all rom clean
 
-Tool_Names := Division NMI 
+Tool_Names := Division NMI IRQ Timer 
 
 all:
 	$(MAKE) --directory=Division	    all
+	$(MAKE) --directory=IRQ		    all
 	$(MAKE) --directory=NMI		    all
+	$(MAKE) --directory=Timer	    all
 
 rom:
 	$(MAKE) --directory=Division	    rom
+	$(MAKE) --directory=IRQ		    rom
 	$(MAKE) --directory=NMI		    rom
+	$(MAKE) --directory=Timer	    rom
 
 clean:
 	$(MAKE) --directory=Division	    clean
+	$(MAKE) --directory=IRQ		    clean
 	$(MAKE) --directory=NMI		    clean
+	$(MAKE) --directory=Timer	    clean
 
 ############################################################# {{{1 ##########
 # vim: set nowrap tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab :

@@ -19,55 +19,57 @@
 
 Rom_Name	:= NMI.rom
 Include_Dir     := ../../Library
+Source_Dir	:= src/main/asm
 Config_File	:= rom.cfg
 Object_Files	:= target/obj/Counter.o
 Map_File	:= target/Counter.map
 
-all rom:				    \
+all rom:				    		\
     target/$(Rom_Name)
 
-burn:					    \
+burn:					    		\
     target/$(Rom_Name)
 	minipro -p "AT28C256" -w $(<)
 
 clean:
 	-rm -r target
 
-rom_dump:				    \
+rom_dump:				    		\
     target/$(Rom_Name)
 	hexdump -C $(<)
 
-rom_list:				    \
+rom_list:				    		\
     target/$(Rom_Name)
 	da65 --cpu "65C02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
 
-target/$(Rom_Name):			    \
-    ${Object_Files}			    \
-    $(Include_Dir)/${Config_File}	    \
+target/$(Rom_Name):			    		\
+    ${Object_Files}			    		\
+    $(Include_Dir)/${Config_File}	    		\
     target
-	ld65				    \
-	    --obj-path	$(Include_Dir)	    \
-	    --lib-path	$(Include_Dir)	    \
-	    --cfg-path	$(Include_Dir)	    \
-	    --config	${Config_File}	    \
-	    --mapfile	${Map_File}	    \
-	    -o $(@)			    \
+	ld65				    		\
+	    --obj-path	$(Include_Dir)	    		\
+	    --lib-path	$(Include_Dir)	    		\
+	    --cfg-path	$(Include_Dir)	    		\
+	    --config	${Config_File}	    		\
+	    --mapfile	$(basename $(@)).map		\
+	    --dbgfile	$(basename $(@)).dbg		\
+	    -o $(@)			    		\
 	    ${Object_Files}
 
-target/obj/Counter.o:			    \
-    src/main/asm/Counter.s		    \
-    $(Include_Dir)/VIA.inc		    \
-    $(Include_Dir)/LCD.inc		    \
-    target				    \
+target/obj/Counter.o:			    		\
+    ${Source_Dir}/Counter.s		    		\
+    $(Include_Dir)/VIA.inc		    		\
+    $(Include_Dir)/LCD.inc		    		\
+    target				    		\
     target/obj
 
-target/obj/%.o:	src/main/asm/%.s
-	ca65				    \
-	    -W1				    \
-	    --cpu "65c02"		    \
-	    --include-dir $(Include_Dir)    \
-	    --listing $(basename $(@)).lst  \
-	    -o $(@)			    \
+target/obj/%.o:	${Source_Dir}/%.s
+	ca65				    		\
+	    -W1				    		\
+	    --cpu "65c02"		    		\
+	    --include-dir $(Include_Dir)    		\
+	    --listing $(basename $(@)).lst  		\
+	    -o $(@)			    		\
 	    $(<)
 
 target:

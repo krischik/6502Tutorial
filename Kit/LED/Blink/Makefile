@@ -19,53 +19,55 @@
 
 Rom_Name	:= Blink_LED.rom
 Include_Dir     := ../../Library
+Source_Dir	:= src/main/asm
 Config_File	:= rom.cfg
 Object_Files	:= target/obj/Blink_LED.o
 Map_File	:= target/Blink_LED.map
 
-all rom:				    \
+all rom:				    		\
     target/$(Rom_Name)
 
-burn:					    \
+burn:					    		\
     target/$(Rom_Name)
 	minipro -p "AT28C256" -w $(<)
 
 clean:
 	-rm -r target
 
-rom_dump:				    \
+rom_dump:				    		\
     target/$(Rom_Name)
 	hexdump -C $(<)
 
-rom_list:				    \
+rom_list:				    		\
     target/$(Rom_Name)
 	da65 --cpu "65c02" --start-addr "8000" $(<) | grep --invert-match --word-regexp nop
 
-target/$(Rom_Name):			    \
+target/$(Rom_Name):			    		\
     ${Object_Files}
-	ld65				    \
-	    --obj-path	$(Include_Dir)	    \
-	    --lib-path	$(Include_Dir)	    \
-	    --cfg-path	$(Include_Dir)	    \
-	    --config	${Config_File}	    \
-	    --mapfile	${Map_File}	    \
-	    -o $(@)			    \
+	ld65				    		\
+	    --obj-path	$(Include_Dir)	    		\
+	    --lib-path	$(Include_Dir)	    		\
+	    --cfg-path	$(Include_Dir)	    		\
+	    --config	${Config_File}	    		\
+	    --mapfile	$(basename $(@)).map		\
+	    --dbgfile	$(basename $(@)).dbg		\
+	    -o $(@)			    		\
 	    ${+}
 
-target/obj/Blink_LED.o:			    \
-    src/main/asm/Blink_LED.s		    \
-    $(Include_Dir)/VIA.inc		    \
-    $(Include_Dir)/LCD.inc		    \
-    target				    \
+target/obj/Blink_LED.o:			    		\
+    ${Source_Dir}/Blink_LED.s		    		\
+    $(Include_Dir)/VIA.inc		    		\
+    $(Include_Dir)/LCD.inc		    		\
+    target				    		\
     target/obj
 
-target/obj/%.o: src/main/asm/%.s
-	ca65				    \
-	    -W3				    \
-	    --cpu "65c02"		    \
-	    --include-dir $(Include_Dir)    \
-	    --listing $(basename $(@)).lst  \
-	    -o $(@)			    \
+target/obj/%.o: ${Source_Dir}/%.s
+	ca65				    		\
+	    -W3				    		\
+	    --cpu "65c02"		    		\
+	    --include-dir $(Include_Dir)    		\
+	    --listing $(basename $(@)).lst  		\
+	    -o $(@)			    		\
 	    $(<)
 
 target:
