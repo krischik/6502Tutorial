@@ -1,0 +1,12 @@
+[gitflow "branch"]
+	master = master
+	develop = develop
+[gitflow "prefix"]
+	feature = feature/
+	release = release/
+	hotfix = hotfix/
+	support = support/
+	versiontag = v_
+
+# vim: set nowrap tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab :
+# vim: set textwidth=0 filetype=gitconfig foldmethod=marker nospell :
